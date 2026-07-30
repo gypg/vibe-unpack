@@ -5,6 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   validate:
@@ -12,39 +13,92 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Debug - list examples directory
+        run: |
+          echo "=== Checking out tree ==="
+          find docs/vibe-unpack/examples -type f | sort
+          echo "=== ls per example ==="
+          for d in docs/vibe-unpack/examples/c*-*; do
+            echo "---- $d ----"
+            ls -1 "$d" || true
+          done
+
       - name: Check all examples have required files
         run: |
+          set -e
           echo "Checking example completeness..."
+          missing=0
           for dir in docs/vibe-unpack/examples/c*-*; do
             echo "Checking $dir"
-            if [ ! -f "$dir/demand-spec.md" ]; then echo "MISSING demand-spec.md in $dir"; exit 1; fi
-            if [ ! -f "$dir/demand-graph.json" ]; then echo "MISSING demand-graph.json in $dir"; exit 1; fi
-            if [ ! -f "$dir/README.md" ]; then echo "MISSING README.md in $dir"; exit 1; fi
+            for f in demand-spec.md demand-graph.json README.md; do
+              if [ ! -f "$dir/$f" ]; then
+                echo "MISSING $f in $dir"
+                missing=1
+              fi
+            done
           done
+          if [ "$missing" -eq 1 ]; then
+            echo "Some files are missing!"
+            exit 1
+          fi
           echo "All examples have required files."
 
       - name: Validate JSON structure (basic)
         run: |
+          set -e
           for f in docs/vibe-unpack/examples/*/demand-graph.json; do
             echo "Validating $f"
-            python3 -c "
-import json, sys
-try:
-    data = json.load(open('$f'))
-    assert 'version' in data
-    assert 'nodes' in data
-    assert 'edges' in data
-    assert 'decision_points' in data
-    print(f'OK: {len(data[\"nodes\"])} nodes, {len(data[\"edges\"])} edges')
-except Exception as e:
-    print(f'INVALID: {e}')
+            python3 -c '
+import json, sys, os
+path = os.environ.get("FILE_PATH")
+if not path:
+    print("No FILE_PATH")
     sys.exit(1)
-            "
+try:
+    with open(path) as fh:
+        data = json.load(fh)
+    assert "version" in data, "missing version"
+    assert "nodes" in data and isinstance(data["nodes"], list), "bad nodes"
+    assert "edges" in data and isinstance(data["edges"], list), "bad edges"
+    assert "decision_points" in data, "missing decision_points"
+    print(f"OK: {len(data[\"nodes\"])} nodes, {len(data[\"edges\"])} edges")
+except Exception as e:
+    print(f"INVALID {path}: {e}")
+    sys.exit(1)
+            ' 2>&1 || { echo "Validation failed for $f"; exit 1; }
           done
+        env:
+          FILE_PATH: ${{ matrix.file }}   # not used, we loop inside
+        # Better: use a loop with proper env per file. Simpler version below.
+
+      - name: Validate all JSONs cleanly
+        run: |
+          python3 - << 'PYEOF'
+import json, glob, sys
+errors = []
+for f in sorted(glob.glob("docs/vibe-unpack/examples/*/demand-graph.json")):
+    try:
+        data = json.load(open(f))
+        assert "version" in data
+        assert isinstance(data.get("nodes"), list)
+        assert isinstance(data.get("edges"), list)
+        print(f"VALID: {f} ({len(data['nodes'])} nodes)")
+    except Exception as e:
+        errors.append((f, str(e)))
+        print(f"INVALID: {f} - {e}")
+if errors:
+    print("\nErrors:")
+    for f, e in errors:
+        print(f"  {f}: {e}")
+    sys.exit(1)
+print("\nAll JSONs valid.")
+PYEOF
 
       - name: Check SKILL.md frontmatter
         run: |
-          head -10 docs/vibe-unpack/SKILL.md
-          grep -q "name: vibe-unpack" docs/vibe-unpack/SKILL.md || (echo "Missing name in frontmatter"; exit 1)
-          grep -q "description:" docs/vibe-unpack/SKILL.md || (echo "Missing description"; exit 1)
-          echo "SKILL.md frontmatter looks good."
+          set -e
+          echo "=== SKILL.md head ==="
+          head -8 docs/vibe-unpack/SKILL.md
+          grep -q "^name: vibe-unpack" docs/vibe-unpack/SKILL.md || { echo "Missing or wrong 'name:'"; exit 1; }
+          grep -q "^description:" docs/vibe-unpack/SKILL.md || { echo "Missing 'description:'"; exit 1; }
+          echo "SKILL.md frontmatter OK."
