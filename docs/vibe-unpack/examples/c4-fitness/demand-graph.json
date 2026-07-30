@@ -1,0 +1,443 @@
+{
+  "version": "0.1",
+  "generated_at": "2026-07-31",
+  "anchor": "我想做一个 App，记录我健身，打卡，然后能看到自己的进步曲线。就是那种能激励我的那种。",
+  "nodes": [
+    {
+      "id": "anchor_001",
+      "type": "Anchor",
+      "label": "健身打卡 + 进步曲线（激励自己坚持）",
+      "source": "user_quote",
+      "evidence": "我想做一个 App，记录我健身，打卡，然后能看到自己的进步曲线。就是那种能激励我的那种。",
+      "confidence": 1.0
+    },
+    {
+      "id": "workaround_01",
+      "type": "WorkaroundStep",
+      "label": "健身后在备忘录记动作+重量",
+      "step_order": 1,
+      "tool_used": "手机备忘录",
+      "time_cost": "1-2分钟",
+      "pain_level": 1,
+      "evidence": "健身后，在备忘录里记动作 + 重量 + 组数"
+    },
+    {
+      "id": "workaround_02",
+      "type": "WorkaroundStep",
+      "label": "偶尔手动复制到 Excel 画趋势",
+      "step_order": 2,
+      "tool_used": "Excel",
+      "time_cost": "很烦，几乎不做",
+      "pain_level": 4,
+      "evidence": "想看进步，就手动复制到 Excel 画图"
+    },
+    {
+      "id": "pain_01",
+      "type": "PainPoint",
+      "label": "记录不是问题，坚持才是",
+      "frequency": "每次想放弃时",
+      "severity": 5,
+      "user_quote": "我其实不讨厌记数据，我讨厌的是‘我记了也没用，因为我还是坚持不下去’。",
+      "evidence": "用户明确区分了痛点",
+      "source": "user_quote",
+      "confidence": 0.95
+    },
+    {
+      "id": "pain_02",
+      "type": "PainPoint",
+      "label": "想看进步曲线太麻烦",
+      "frequency": "想激励自己时",
+      "severity": 4,
+      "evidence": "想看自己进步的时候，要手动翻备忘录、复制到 Excel、画图。等我做好这些，我已经不想练了。",
+      "source": "user_quote",
+      "confidence": 0.9
+    },
+    {
+      "id": "pain_03",
+      "type": "PainPoint",
+      "label": "数据太详细反而不想记",
+      "frequency": "每次打开 App",
+      "severity": 3,
+      "evidence": "很多 App 要我选动作、选组数、选 RPE、加照片、加笔记…… 我就直接不记了。",
+      "source": "user_quote",
+      "confidence": 0.95
+    },
+    {
+      "id": "constraint_tech_strong",
+      "type": "Constraint",
+      "label": "技术能力强（程序员），可以自建或用高级工具",
+      "constraint_category": "skill_level",
+      "hardness": "fact",
+      "evidence": "用户是程序员",
+      "source": "user_quote",
+      "confidence": 1.0
+    },
+    {
+      "id": "constraint_execution_low",
+      "type": "Constraint",
+      "label": "执行力低，对自己没信心",
+      "constraint_category": "maintenance_capacity",
+      "hardness": "hard",
+      "evidence": "用户明确说坚持不下去",
+      "source": "user_quote",
+      "confidence": 0.95
+    },
+    {
+      "id": "constraint_zero_friction",
+      "type": "Constraint",
+      "label": "每条数据必须 10 秒内搞定",
+      "constraint_category": "time_budget",
+      "hardness": "hard",
+      "evidence": "讨厌复杂输入",
+      "source": "user_quote",
+      "confidence": 0.95
+    },
+    {
+      "id": "constraint_no_social",
+      "type": "Constraint",
+      "label": "主要激励来源是看到自己进步，不是社交",
+      "constraint_category": "success_definition",
+      "hardness": "medium",
+      "evidence": "用户描述中强调‘看到自己的进步曲线’",
+      "source": "user_quote",
+      "confidence": 0.85
+    },
+    {
+      "id": "assumption_tool_fixes_stick",
+      "type": "Assumption",
+      "label": "用户以为做好记录工具就能坚持",
+      "risk_level": "high",
+      "validation_method": "用户自己说坚持是核心问题",
+      "evidence": "用户明确区分了‘记录不麻烦’和‘坚持才是问题’",
+      "source": "user_quote",
+      "confidence": 0.95
+    },
+    {
+      "id": "assumption_need_beautiful_chart",
+      "type": "Assumption",
+      "label": "用户以为需要漂亮曲线和大量历史数据",
+      "risk_level": "medium",
+      "validation_method": "可能只需要即时反馈",
+      "evidence": "尚未深度验证",
+      "source": "inferred",
+      "confidence": 0.6
+    },
+    {
+      "id": "alternative_memo_excel",
+      "type": "Alternative",
+      "label": "继续用备忘录 + 偶尔 Excel",
+      "status": "currently_using",
+      "evidence": "用户现在的主要做法"
+    },
+    {
+      "id": "success_01",
+      "type": "SuccessCriterion",
+      "label": "能持续记录至少 80% 的训练",
+      "observable": "记录频率稳定",
+      "time_horizon": "3个月",
+      "evidence": "用户期望"
+    },
+    {
+      "id": "success_02",
+      "type": "SuccessCriterion",
+      "label": "想看进步时 10 秒内看到‘今天比上周强’",
+      "observable": "即时反馈可用",
+      "time_horizon": "持续",
+      "evidence": "用户痛点"
+    },
+    {
+      "id": "success_03",
+      "type": "SuccessCriterion",
+      "label": "看到数据后有动力继续练",
+      "observable": "数据成为激励而非负担",
+      "time_horizon": "持续",
+      "evidence": "用户期望"
+    },
+    {
+      "id": "failure_01",
+      "type": "FailureCriterion",
+      "label": "记了 3 天就放弃",
+      "observable": "使用频率断崖式下降",
+      "time_horizon": "1个月内",
+      "evidence": "定义失败"
+    },
+    {
+      "id": "failure_02",
+      "type": "FailureCriterion",
+      "label": "工具太麻烦，宁愿用备忘录",
+      "observable": "实际使用复杂度超过备忘录",
+      "time_horizon": "2周内",
+      "evidence": "用户已有历史"
+    },
+    {
+      "id": "failure_03",
+      "type": "FailureCriterion",
+      "label": "看了数据还是不想练",
+      "observable": "数据没有转化为行动",
+      "time_horizon": "3个月后",
+      "evidence": "核心问题未解决"
+    },
+    {
+      "id": "decision_01",
+      "type": "DecisionPoint",
+      "label": "技术上激进 vs 极简摩擦",
+      "question": "既然用户是程序员，是要做一个强大的自建系统，还是做一个极简到近乎零摩擦的工具？",
+      "chosen_option_id": "opt_zero_friction",
+      "rationale": "用户执行力低是硬约束。技术能力强可以用来做极简工具，而不是做复杂系统。复杂系统会增加摩擦，导致更早放弃。",
+      "abandoned_cost": "少一些数据丰富度和分析深度"
+    },
+    {
+      "id": "decision_01_opt_powerful",
+      "type": "Alternative",
+      "label": "做一个强大的自建系统（详细数据、漂亮图表、自动化）",
+      "decision_point_id": "decision_01",
+      "pros": "发挥技术优势，数据丰富",
+      "cons": "开发和维护成本高，日常使用摩擦可能更高",
+      "constraint_alignment": "被 constraint_execution_low 和 constraint_zero_friction 反对",
+      "status": "secondary"
+    },
+    {
+      "id": "decision_01_opt_zero_friction",
+      "type": "Alternative",
+      "label": "极简工具（一行输入，10秒完成，即时看到进步）",
+      "decision_point_id": "decision_01",
+      "pros": "摩擦最低，符合执行力约束",
+      "cons": "数据简单，分析有限",
+      "constraint_alignment": "完美符合 constraint_execution_low、constraint_zero_friction",
+      "status": "chosen"
+    },
+    {
+      "id": "decision_02",
+      "type": "DecisionPoint",
+      "label": "工具能解决坚持问题吗？",
+      "question": "是继续做记录工具，还是承认技术可能解决不了坚持问题，需要外部激励？",
+      "chosen_option_id": "opt_verify_first",
+      "rationale": "用户自己都说坚持是核心。必须先验证记录本身是不是问题根源。如果连备忘录都记不下来，工具再好也没用。",
+      "abandoned_cost": "可能多花 2 周时间验证"
+    },
+    {
+      "id": "decision_02_opt_tool",
+      "type": "Alternative",
+      "label": "直接做一个更好的工具",
+      "decision_point_id": "decision_02",
+      "pros": "用户有技术能力",
+      "cons": "可能治标不治本",
+      "constraint_alignment": "被 constraint_execution_low 弱化",
+      "status": "secondary"
+    },
+    {
+      "id": "decision_02_opt_verify",
+      "type": "Alternative",
+      "label": "先用 2 周备忘录验证记录是否是根源",
+      "decision_point_id": "decision_02",
+      "pros": "低成本验证，避免做无用工具",
+      "cons": "需要等待 2 周",
+      "constraint_alignment": "强烈符合 constraint_execution_low",
+      "status": "chosen"
+    },
+    {
+      "id": "risk_01",
+      "type": "Risk",
+      "label": "即使做了极简工具，用户还是坚持不下去",
+      "likelihood": "high",
+      "impact": "high",
+      "mitigation": "必须先用 2 周备忘录验证；如果不行，考虑外部问责而不是继续做工具",
+      "decision_point_id": "decision_02"
+    },
+    {
+      "id": "risk_02",
+      "type": "Risk",
+      "label": "用户技术能力强，可能会忍不住把工具做得很复杂",
+      "likelihood": "medium",
+      "impact": "high",
+      "mitigation": "明确：复杂 = 增加摩擦 = 更早放弃。必须对抗‘我能做更多’的冲动",
+      "decision_point_id": "decision_01"
+    }
+  ],
+  "edges": [
+    {
+      "source": "anchor_001",
+      "target": "workaround_01",
+      "relation": "expands_to",
+      "confidence": 1.0,
+      "evidence": "用户描述"
+    },
+    {
+      "source": "workaround_01",
+      "target": "workaround_02",
+      "relation": "then",
+      "confidence": 0.9,
+      "evidence": "想看趋势时的做法"
+    },
+    {
+      "source": "workaround_02",
+      "target": "pain_02",
+      "relation": "causes",
+      "confidence": 0.9,
+      "evidence": "手动整理太麻烦"
+    },
+    {
+      "source": "constraint_execution_low",
+      "target": "pain_01",
+      "relation": "causes",
+      "confidence": 0.95,
+      "evidence": "坚持不下去是执行力问题"
+    },
+    {
+      "source": "constraint_zero_friction",
+      "target": "pain_03",
+      "relation": "causes",
+      "confidence": 0.9,
+      "evidence": "复杂输入导致不记"
+    },
+    {
+      "source": "constraint_tech_strong",
+      "target": "decision_01",
+      "relation": "enables",
+      "confidence": 1.0,
+      "evidence": "用户可以自建"
+    },
+    {
+      "source": "constraint_execution_low",
+      "target": "decision_01_opt_powerful",
+      "relation": "prunes",
+      "confidence": 0.9,
+      "evidence": "复杂系统会增加摩擦"
+    },
+    {
+      "source": "constraint_zero_friction",
+      "target": "decision_01_opt_powerful",
+      "relation": "prunes",
+      "confidence": 0.95,
+      "evidence": "详细数据 = 高摩擦"
+    },
+    {
+      "source": "decision_01",
+      "target": "decision_01_opt_zero_friction",
+      "relation": "chosen_over",
+      "confidence": 0.9,
+      "evidence": "极简优先"
+    },
+    {
+      "source": "decision_02",
+      "target": "decision_02_opt_verify",
+      "relation": "chosen_over",
+      "confidence": 0.85,
+      "evidence": "先验证"
+    },
+    {
+      "source": "decision_01_opt_powerful",
+      "target": "risk_02",
+      "relation": "leads_to_risk",
+      "confidence": 0.85,
+      "evidence": "技术能力可能导致过度设计"
+    },
+    {
+      "source": "decision_02_opt_tool",
+      "target": "risk_01",
+      "relation": "leads_to_risk",
+      "confidence": 0.9,
+      "evidence": "可能治标不治本"
+    },
+    {
+      "source": "success_02",
+      "target": "pain_02",
+      "relation": "validates",
+      "confidence": 1.0,
+      "evidence": "10秒看到进步直接回应最大摩擦痛"
+    },
+    {
+      "source": "assumption_tool_fixes_stick",
+      "target": "decision_02",
+      "relation": "assumes",
+      "confidence": 0.95,
+      "evidence": "用户默认工具能解决坚持"
+    },
+    {
+      "source": "alternative_memo_excel",
+      "target": "anchor_001",
+      "relation": "currently_satisfies",
+      "confidence": 1.0,
+      "evidence": "用户现在在用"
+    }
+  ],
+  "decision_points": [
+    {
+      "id": "decision_01",
+      "question": "技术上激进 vs 极简摩擦",
+      "chosen_option_id": "opt_zero_friction",
+      "rationale": "用户执行力低是硬约束。技术能力强可以用来做极简工具，而不是做复杂系统。",
+      "abandoned_cost": "少一些数据丰富度和分析深度",
+      "options": [
+        {
+          "id": "opt_powerful",
+          "label": "做一个强大的自建系统",
+          "pros": "发挥技术优势，数据丰富",
+          "cons": "开发和维护成本高，日常使用摩擦可能更高",
+          "constraint_alignment": "被 constraint_execution_low 和 constraint_zero_friction 反对",
+          "status": "secondary"
+        },
+        {
+          "id": "opt_zero_friction",
+          "label": "极简工具（一行输入，10秒完成，即时看到进步）",
+          "pros": "摩擦最低，符合执行力约束",
+          "cons": "数据简单，分析有限",
+          "constraint_alignment": "完美符合 constraint_execution_low、constraint_zero_friction",
+          "status": "chosen"
+        }
+      ]
+    },
+    {
+      "id": "decision_02",
+      "question": "工具能解决坚持问题吗？",
+      "chosen_option_id": "opt_verify_first",
+      "rationale": "用户自己都说坚持是核心。必须先验证记录本身是不是问题根源。",
+      "abandoned_cost": "可能多花 2 周时间验证",
+      "options": [
+        {
+          "id": "opt_tool",
+          "label": "直接做一个更好的工具",
+          "pros": "用户有技术能力",
+          "cons": "可能治标不治本",
+          "constraint_alignment": "被 constraint_execution_low 弱化",
+          "status": "secondary"
+        },
+        {
+          "id": "opt_verify_first",
+          "label": "先用 2 周备忘录验证记录是否是根源",
+          "pros": "低成本验证，避免做无用工具",
+          "cons": "需要等待 2 周",
+          "constraint_alignment": "强烈符合 constraint_execution_low",
+          "status": "chosen"
+        }
+      ]
+    }
+  ],
+  "constraints_summary": {
+    "hard_constraints": [
+      "执行力低，对自己没信心",
+      "每条数据必须 10 秒内搞定",
+      "主要激励来源是看到自己进步，不是社交"
+    ],
+    "fact_constraints": [
+      "技术能力强（程序员），可以自建"
+    ],
+    "unknowns": [
+      "如果 2 周备忘录验证失败，用户是否愿意接受‘技术解决不了’这个结论"
+    ]
+  },
+  "closure_status": {
+    "minimum_met": true,
+    "missing": [],
+    "recommendations": [
+      "必须先跑 2 周备忘录验证",
+      "任何工具方案都必须极简到近乎零摩擦"
+    ]
+  },
+  "key_insights": [
+    "用户最大的痛不是记录，而是坚持。技术可能解决不了。",
+    "技术能力强反而是双刃剑——容易把工具做复杂，导致更早放弃。",
+    "必须先用 2 周备忘录验证：如果连备忘录都记不下来，工具再好也没用。",
+    "极简到一行输入 + 10 秒完成 + 即时反馈，是唯一可能可行的路径。"
+  ]
+}

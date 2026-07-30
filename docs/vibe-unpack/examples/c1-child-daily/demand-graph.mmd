@@ -1,0 +1,119 @@
+%% Mermaid 知识图 - C1 孩子日常需求展开
+%% 人类可读版本，重点展示分支和约束剪枝
+
+graph TD
+    subgraph Anchor["初始支点"]
+        A["记录孩子日常<br/>'像小红书但更简单'"]
+    end
+
+    subgraph Workaround["当前 workaround（4步）"]
+        W1["1. 手机拍照/视频"]
+        W2["2. 备忘录写1-2句"]
+        W3["3. 想给奶奶看→截图发微信"]
+        W4["4. 想找旧记录→手动翻备忘录"]
+    end
+
+    subgraph Pains["痛点"]
+        P1["翻3个月前记录<br/>翻20分钟没找到<br/>严重度4/5"]
+        P2["分享给奶奶<br/>需要重复截图<br/>奶奶不会自己翻"]
+        P3["备忘录越来越乱<br/>孩子内容难找"]
+    end
+
+    subgraph Constraints["硬约束（致命）"]
+        C1["完全不会编程<br/>身边也无人会"]
+        C2["时间极少<br/>可能3-6月不管"]
+        C3["奶奶只会用微信<br/>技术能力极低"]
+        C4["数据至少留半年<br/>不能莫名丢失"]
+    end
+
+    subgraph Assumptions["隐性假设（已暴露）"]
+        AS1["以为'像小红书'<br/>=要做社区"]
+        AS2["以为'做App'<br/>是可行方案"]
+    end
+
+    subgraph Decisions["关键决策点"]
+        D1{"要不要做成<br/>类似小红书的<br/>社区平台？"}
+        D2{"数据放本地<br/>还是云端？"}
+    end
+
+    subgraph Paths["路径选择"]
+        OPT1["社区/平台方案<br/>❌ 被剪掉"]
+        OPT2["极简个人+家人<br/>✅ 倾向选择"]
+        OPT3["云端存储<br/>❌ 被剪掉"]
+        OPT4["本地存储<br/>✅ 倾向选择"]
+    end
+
+    subgraph Risks["风险"]
+        R1["复杂度爆炸<br/>完全超出能力"]
+        R2["3个月后不管<br/>云端数据废掉"]
+        R3["奶奶不会用<br/>做了也白做"]
+    end
+
+    subgraph Success["成功定义（可观测）"]
+        S1["3-6月后能轻松<br/>翻到旧记录"]
+        S2["奶奶能自己看<br/>不用我截图"]
+        S3["我每周用1-2次<br/>不觉得烦"]
+    end
+
+    subgraph Failure["失败定义"]
+        F1["还是得手动翻<br/>和以前一样痛苦"]
+        F2["做了之后不用<br/>比备忘录还麻烦"]
+        F3["3月后不管<br/>打不开或全乱"]
+    end
+
+    %% 展开关系
+    A --> W1 --> W2 --> W3
+    W2 --> W4
+    W4 --> P1
+    W3 --> P2
+    W2 --> P3
+
+    %% 痛点锚定
+    P1 -.->|anchors_from| A
+    P2 -.->|anchors_from| A
+
+    %% 约束剪枝
+    C1 -->|直接剪掉| OPT1
+    C3 -->|直接剪掉| OPT1
+    C1 -->|强烈反对| OPT3
+    C2 -->|强烈反对| OPT3
+
+    %% 决策分支
+    D1 -->|chosen_over| OPT2
+    D1 -->|prunes| OPT1
+    D2 -->|chosen_over| OPT4
+    D2 -->|prunes| OPT3
+
+    %% 风险
+    OPT1 -->|leads_to| R1
+    OPT3 -->|leads_to| R2
+    C3 -->|leads_to| R3
+
+    %% 成功验证痛点
+    S1 -->|validates| P1
+    S2 -->|validates| P2
+
+    %% 假设
+    AS1 -.->|支撑| D1
+    AS2 -.->|支撑| A
+
+    %% 样式
+    classDef anchor fill:#e3f2fd,stroke:#1976d2
+    classDef pain fill:#ffebee,stroke:#c62828
+    classDef constraint fill:#fff3e0,stroke:#e65100
+    classDef decision fill:#f3e5f5,stroke:#7b1fa2
+    classDef chosen fill:#c8e6c9,stroke:#2e7d32
+    classDef pruned fill:#ffcdd2,stroke:#b71c1c,stroke-dasharray: 5 5
+    classDef risk fill:#fce4ec,stroke:#880e4f
+    classDef success fill:#e8f5e9,stroke:#1b5e20
+    classDef failure fill:#efebe9,stroke:#4e342e
+
+    class A anchor
+    class P1,P2,P3 pain
+    class C1,C2,C3,C4 constraint
+    class D1,D2 decision
+    class OPT2,OPT4 chosen
+    class OPT1,OPT3 pruned
+    class R1,R2,R3 risk
+    class S1,S2,S3 success
+    class F1,F2,F3 failure

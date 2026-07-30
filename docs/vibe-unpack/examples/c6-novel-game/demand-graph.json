@@ -1,0 +1,633 @@
+{
+  "version": "0.1",
+  "generated_at": "2026-07-31",
+  "anchor": "我脑子里有一个故事，想把它做成一个像《原神》或者文字冒险游戏的东西。就是玩家可以选择不同的路线，最后有不同结局。",
+  "nodes": [
+    {
+      "id": "anchor_001",
+      "type": "Anchor",
+      "label": "有一个故事，想做成像原神或文字冒险游戏",
+      "source": "user_quote",
+      "evidence": "我脑子里有一个故事，想把它做成一个像《原神》或者文字冒险游戏的东西。就是玩家可以选择不同的路线，最后有不同结局。",
+      "confidence": 1.0
+    },
+    {
+      "id": "background_01",
+      "type": "WorkaroundStep",
+      "label": "用户是文科生，写过短篇",
+      "step_order": 0,
+      "tool_used": "文字写作",
+      "time_cost": "已完成部分",
+      "pain_level": 0,
+      "evidence": "用户是24岁文科生，写过一些短篇"
+    },
+    {
+      "id": "background_02",
+      "type": "WorkaroundStep",
+      "label": "完全零技术、零美术、零音乐、零预算",
+      "step_order": 0,
+      "tool_used": "无",
+      "time_cost": "无",
+      "pain_level": 5,
+      "evidence": "完全不会编程，也不会画画、不会做音乐。预算为零。"
+    },
+    {
+      "id": "background_03",
+      "type": "WorkaroundStep",
+      "label": "对游戏的理解停留在表面",
+      "step_order": 0,
+      "tool_used": "幻想",
+      "time_cost": "无",
+      "pain_level": 3,
+      "evidence": "用户对'做游戏'的理解停留在'选分支 + 看结局'"
+    },
+    {
+      "id": "pain_01",
+      "type": "PainPoint",
+      "label": "想讲故事，但不知道怎么让别人体验",
+      "frequency": "持续",
+      "severity": 5,
+      "evidence": "我脑子里有这个故事，我很想让别人也感受到。但我不知道怎么呈现。",
+      "source": "user_quote",
+      "confidence": 0.95
+    },
+    {
+      "id": "pain_02",
+      "type": "PainPoint",
+      "label": "对游戏复杂度严重低估",
+      "frequency": "持续",
+      "severity": 4,
+      "evidence": "用户提到'像原神''选不同的路线''有不同结局'，但对实际工作量完全没有概念",
+      "source": "user_quote",
+      "confidence": 0.9
+    },
+    {
+      "id": "pain_03",
+      "type": "PainPoint",
+      "label": "完全没有资源（技术、美术、音乐、资金）",
+      "frequency": "持续",
+      "severity": 5,
+      "evidence": "完全不会编程，也不会画画、不会做音乐。预算为零。",
+      "source": "user_quote",
+      "confidence": 1.0
+    },
+    {
+      "id": "constraint_no_programming",
+      "type": "Constraint",
+      "label": "完全不会编程",
+      "constraint_category": "skill_level",
+      "hardness": "hard",
+      "consequence_if_violated": "任何需要写代码的方案都不可行",
+      "evidence": "用户明确：完全不会编程",
+      "source": "user_quote",
+      "confidence": 1.0
+    },
+    {
+      "id": "constraint_no_art",
+      "type": "Constraint",
+      "label": "不会画画、不会做音乐",
+      "constraint_category": "skill_level",
+      "hardness": "hard",
+      "consequence_if_violated": "任何需要原画、3D、音效的方案都不可行",
+      "evidence": "用户明确：不会画画、不会做音乐",
+      "source": "user_quote",
+      "confidence": 1.0
+    },
+    {
+      "id": "constraint_zero_budget",
+      "type": "Constraint",
+      "label": "预算为零",
+      "constraint_category": "budget",
+      "hardness": "hard",
+      "consequence_if_violated": "不能外包、不能买资产、不能订阅付费工具",
+      "evidence": "用户明确：预算为零",
+      "source": "user_quote",
+      "confidence": 1.0
+    },
+    {
+      "id": "constraint_story_driven",
+      "type": "Constraint",
+      "label": "真正驱动的是'想讲这个故事'，而不是'做游戏'",
+      "constraint_category": "success_definition",
+      "hardness": "hard",
+      "evidence": "用户是文科生，写过短篇，核心动机是讲故事",
+      "source": "user_quote",
+      "confidence": 0.95
+    },
+    {
+      "id": "constraint_surface_understanding",
+      "type": "Constraint",
+      "label": "对游戏理解停留在'选分支 + 多结局'",
+      "constraint_category": "skill_level",
+      "hardness": "fact",
+      "consequence_if_violated": "用户严重低估复杂度",
+      "evidence": "用户描述中反复提到这些表面元素",
+      "source": "user_quote",
+      "confidence": 1.0
+    },
+    {
+      "id": "assumption_story_equals_game",
+      "type": "Assumption",
+      "label": "用户以为'想讲故事'就必须'做游戏'",
+      "risk_level": "high",
+      "validation_method": "必须问：如果只能用文字+图片，还想讲吗？",
+      "evidence": "用户默认从'游戏'开始",
+      "source": "inferred",
+      "confidence": 0.95
+    },
+    {
+      "id": "assumption_choices_are_core",
+      "type": "Assumption",
+      "label": "用户高估了'玩家选择'的价值，低估了'故事本身'和'呈现质量'",
+      "risk_level": "high",
+      "validation_method": "必须让用户体验一个纯文字版本",
+      "evidence": "用户反复强调'选分支''多结局'",
+      "source": "inferred",
+      "confidence": 0.85
+    },
+    {
+      "id": "assumption_learn_while_doing",
+      "type": "Assumption",
+      "label": "用户以为可以边学边做",
+      "risk_level": "high",
+      "validation_method": "零基础 + 零预算 + 故事驱动，学习曲线会耗尽热情",
+      "evidence": "用户没有意识到学习成本",
+      "source": "inferred",
+      "confidence": 0.9
+    },
+    {
+      "id": "assumption_genshin_level",
+      "type": "Assumption",
+      "label": "用户幻想最终形态是《原神》级别",
+      "risk_level": "high",
+      "validation_method": "必须被明确否定",
+      "evidence": "用户提到'像原神'",
+      "source": "user_quote",
+      "confidence": 1.0
+    },
+    {
+      "id": "alternative_nothing",
+      "type": "Alternative",
+      "label": "目前什么都没做（停留在脑子里）",
+      "status": "currently_using",
+      "evidence": "没有实际行动，因为不知道从哪里开始"
+    },
+    {
+      "id": "success_01",
+      "type": "SuccessCriterion",
+      "label": "这个故事被至少 10 个人完整体验过（不管用什么形式）",
+      "observable": "有真实读者/玩家反馈",
+      "time_horizon": "6个月内",
+      "evidence": "核心是'讲出去'"
+    },
+    {
+      "id": "success_02",
+      "type": "SuccessCriterion",
+      "label": "用户自己觉得'这个故事讲出去了'",
+      "observable": "用户主观感受",
+      "time_horizon": "6个月内",
+      "evidence": "动机满足"
+    },
+    {
+      "id": "success_03",
+      "type": "SuccessCriterion",
+      "label": "用户没有因为技术门槛而彻底放弃讲这个故事",
+      "observable": "故事以某种形式存在",
+      "time_horizon": "长期",
+      "evidence": "避免彻底失败"
+    },
+    {
+      "id": "failure_01",
+      "type": "FailureCriterion",
+      "label": "花了半年学 Unity，最后什么都没做出来，故事烂在脑子里",
+      "observable": "时间投入无产出",
+      "time_horizon": "6个月",
+      "evidence": "经典失败路径"
+    },
+    {
+      "id": "failure_02",
+      "type": "FailureCriterion",
+      "label": "做了一个半成品，操作复杂，别人玩了 5 分钟就放弃",
+      "observable": "体验质量差",
+      "time_horizon": "项目完成时",
+      "evidence": "野心超过能力"
+    },
+    {
+      "id": "failure_03",
+      "type": "FailureCriterion",
+      "label": "因为'做不成游戏'而彻底放弃讲这个故事",
+      "observable": "故事永远停留在脑子里",
+      "time_horizon": "长期",
+      "evidence": "最坏结果"
+    },
+    {
+      "id": "decision_01",
+      "type": "DecisionPoint",
+      "label": "你到底想讲故事，还是想做游戏？",
+      "question": "核心动机是'讲这个故事让别人体验'，还是'做一个游戏'？",
+      "chosen_option_id": "opt_story_first",
+      "rationale": "用户是文科生，写过短篇，核心驱动是故事。技术路径必须服务于讲故事，而不是反过来。",
+      "abandoned_cost": "少一些'做游戏'的成就感"
+    },
+    {
+      "id": "decision_01_opt_game",
+      "type": "Alternative",
+      "label": "想做游戏（技术优先）",
+      "decision_point_id": "decision_01",
+      "pros": "可能获得技术成就感",
+      "cons": "以当前资源，几乎不可能完成可玩作品",
+      "constraint_alignment": "被 constraint_no_programming、constraint_no_art、constraint_zero_budget 直接剪掉",
+      "status": "rejected"
+    },
+    {
+      "id": "decision_01_opt_story",
+      "type": "Alternative",
+      "label": "想讲故事（故事优先）",
+      "decision_point_id": "decision_01",
+      "pros": "可以用极低成本的形式实现",
+      "cons": "可能感觉'不够酷'",
+      "constraint_alignment": "符合 constraint_story_driven",
+      "status": "chosen"
+    },
+    {
+      "id": "decision_02",
+      "type": "DecisionPoint",
+      "label": "你愿意接受'不是游戏'的形式吗？",
+      "question": "必须是'可交互、可选择、有系统'的游戏，还是可以是互动故事/视觉小说/网页小说？",
+      "chosen_option_id": "opt_any_form",
+      "rationale": "讲故事的方式有很多，游戏只是成本最高的一种。必须降低形式要求，否则故事永远出不来。",
+      "abandoned_cost": "少一些'游戏'的标签"
+    },
+    {
+      "id": "decision_02_opt_must_game",
+      "type": "Alternative",
+      "label": "必须是'游戏'（可交互、可选择、有系统）",
+      "decision_point_id": "decision_02",
+      "pros": "满足用户对'游戏'的想象",
+      "cons": "资源完全不足以支持",
+      "constraint_alignment": "被所有硬约束剪掉",
+      "status": "rejected"
+    },
+    {
+      "id": "decision_02_opt_any_form",
+      "type": "Alternative",
+      "label": "可以是互动故事 / 视觉小说 / 网页小说",
+      "decision_point_id": "decision_02",
+      "pros": "极低成本可实现，核心是故事",
+      "cons": "可能不符合用户对'游戏'的期待",
+      "constraint_alignment": "唯一可行路径",
+      "status": "chosen"
+    },
+    {
+      "id": "decision_03",
+      "type": "DecisionPoint",
+      "label": "成本排序（从低到高）",
+      "question": "应该从哪个成本级别开始尝试？",
+      "chosen_option_id": "opt_level_1",
+      "rationale": "必须从最低成本开始，否则热情会在学习曲线上耗尽。",
+      "abandoned_cost": "可能需要多做几个版本才能找到合适的形式"
+    },
+    {
+      "id": "decision_03_opt_level_1",
+      "type": "Alternative",
+      "label": "Level 1: 互动小说（纯文字，Twine / 网页）",
+      "decision_point_id": "decision_03",
+      "pros": "成本最低，1-2周可出原型，零技术门槛",
+      "cons": "只有文字",
+      "constraint_alignment": "完美符合所有约束",
+      "status": "chosen"
+    },
+    {
+      "id": "decision_03_opt_level_2",
+      "type": "Alternative",
+      "label": "Level 2: 互动小说 + 少量插画",
+      "decision_point_id": "decision_03",
+      "pros": "比纯文字稍丰富",
+      "cons": "需要找/生成图片",
+      "constraint_alignment": "基本符合（需要一点美术资源）",
+      "status": "later"
+    },
+    {
+      "id": "decision_03_opt_level_3",
+      "type": "Alternative",
+      "label": "Level 3: 视觉小说（Ren'Py）",
+      "decision_point_id": "decision_03",
+      "pros": "有画面和声音，比网页小说正式",
+      "cons": "需要学一点 Ren'Py，需要图片和音乐资源",
+      "constraint_alignment": "部分符合（学习成本比 Unity 低，但依然有门槛）",
+      "status": "later"
+    },
+    {
+      "id": "decision_03_opt_level_4",
+      "type": "Alternative",
+      "label": "Level 4: 更复杂的游戏形式（Unity / Godot 等）",
+      "decision_point_id": "decision_03",
+      "pros": "最接近用户想象",
+      "cons": "学习成本极高，需要团队，需要资金",
+      "constraint_alignment": "被所有硬约束剪掉",
+      "status": "rejected"
+    },
+    {
+      "id": "risk_01",
+      "type": "Risk",
+      "label": "用户从'学 Unity'开始，半年后一事无成",
+      "likelihood": "high",
+      "impact": "high",
+      "mitigation": "必须明确禁止从高成本路径开始；强制从 Level 1 开始",
+      "evidence": "用户提到'像原神'"
+    },
+    {
+      "id": "risk_02",
+      "type": "Risk",
+      "label": "做了互动小说后觉得'不够'，然后放弃",
+      "likelihood": "medium",
+      "impact": "medium",
+      "mitigation": "明确：先把故事讲出去最重要；形式可以迭代",
+      "evidence": "用户可能高估形式的重要性"
+    },
+    {
+      "id": "risk_03",
+      "type": "Risk",
+      "label": "即使做了 Level 1，用户因为'不是游戏'而觉得失败",
+      "likelihood": "medium",
+      "impact": "medium",
+      "mitigation": "必须在开始前明确：成功标准是'故事被体验'，不是'做成了游戏'",
+      "evidence": "用户对'游戏'有执念"
+    }
+  ],
+  "edges": [
+    {
+      "source": "anchor_001",
+      "target": "background_01",
+      "relation": "expands_to",
+      "confidence": 1.0,
+      "evidence": "用户背景"
+    },
+    {
+      "source": "anchor_001",
+      "target": "background_02",
+      "relation": "expands_to",
+      "confidence": 1.0,
+      "evidence": "用户背景"
+    },
+    {
+      "source": "anchor_001",
+      "target": "background_03",
+      "relation": "expands_to",
+      "confidence": 1.0,
+      "evidence": "用户对游戏的理解"
+    },
+    {
+      "source": "background_02",
+      "target": "pain_03",
+      "relation": "causes",
+      "confidence": 1.0,
+      "evidence": "零资源导致所有技术路径被剪掉"
+    },
+    {
+      "source": "background_03",
+      "target": "pain_02",
+      "relation": "causes",
+      "confidence": 0.9,
+      "evidence": "表面理解导致低估复杂度"
+    },
+    {
+      "source": "background_01",
+      "target": "constraint_story_driven",
+      "relation": "enables",
+      "confidence": 0.95,
+      "evidence": "文科背景 + 写过短篇"
+    },
+    {
+      "source": "constraint_no_programming",
+      "target": "decision_01_opt_game",
+      "relation": "prunes",
+      "confidence": 1.0,
+      "evidence": "不会编程"
+    },
+    {
+      "source": "constraint_no_art",
+      "target": "decision_01_opt_game",
+      "relation": "prunes",
+      "confidence": 1.0,
+      "evidence": "不会画画做音乐"
+    },
+    {
+      "source": "constraint_zero_budget",
+      "target": "decision_01_opt_game",
+      "relation": "prunes",
+      "confidence": 1.0,
+      "evidence": "零预算"
+    },
+    {
+      "source": "constraint_story_driven",
+      "target": "decision_01",
+      "relation": "constrains",
+      "confidence": 0.95,
+      "evidence": "核心是讲故事"
+    },
+    {
+      "source": "constraint_surface_understanding",
+      "target": "assumption_choices_are_core",
+      "relation": "causes",
+      "confidence": 0.9,
+      "evidence": "表面理解导致高估选择的价值"
+    },
+    {
+      "source": "decision_01",
+      "target": "decision_01_opt_story",
+      "relation": "chosen_over",
+      "confidence": 0.9,
+      "evidence": "必须引导到故事优先"
+    },
+    {
+      "source": "decision_01_opt_game",
+      "target": "risk_01",
+      "relation": "leads_to_risk",
+      "confidence": 0.95,
+      "evidence": "技术优先几乎必然失败"
+    },
+    {
+      "source": "decision_02",
+      "target": "decision_02_opt_any_form",
+      "relation": "chosen_over",
+      "confidence": 0.95,
+      "evidence": "必须降低形式要求"
+    },
+    {
+      "source": "decision_02_opt_must_game",
+      "target": "risk_01",
+      "relation": "leads_to_risk",
+      "confidence": 0.9,
+      "evidence": "必须是游戏 = 几乎不可能"
+    },
+    {
+      "source": "decision_03",
+      "target": "decision_03_opt_level_1",
+      "relation": "chosen_over",
+      "confidence": 0.95,
+      "evidence": "必须从最低成本开始"
+    },
+    {
+      "source": "decision_03_opt_level_4",
+      "target": "risk_01",
+      "relation": "leads_to_risk",
+      "confidence": 1.0,
+      "evidence": "从高成本开始必然失败"
+    },
+    {
+      "source": "success_01",
+      "target": "pain_01",
+      "relation": "validates",
+      "confidence": 1.0,
+      "evidence": "故事被体验直接回应'不知道怎么呈现'"
+    },
+    {
+      "source": "assumption_story_equals_game",
+      "target": "decision_01",
+      "relation": "assumes",
+      "confidence": 0.95,
+      "evidence": "用户默认讲故事必须做游戏"
+    },
+    {
+      "source": "assumption_genshin_level",
+      "target": "decision_03_opt_level_4",
+      "relation": "assumes",
+      "confidence": 1.0,
+      "evidence": "用户幻想原神级别"
+    },
+    {
+      "source": "alternative_nothing",
+      "target": "anchor_001",
+      "relation": "currently_satisfies",
+      "confidence": 1.0,
+      "evidence": "目前停留在脑子里"
+    }
+  ],
+  "decision_points": [
+    {
+      "id": "decision_01",
+      "question": "你到底想讲故事，还是想做游戏？",
+      "chosen_option_id": "opt_story_first",
+      "rationale": "用户是文科生，写过短篇，核心驱动是故事。技术路径必须服务于讲故事，而不是反过来。",
+      "abandoned_cost": "少一些'做游戏'的成就感",
+      "options": [
+        {
+          "id": "opt_game",
+          "label": "想做游戏（技术优先）",
+          "pros": "可能获得技术成就感",
+          "cons": "以当前资源，几乎不可能完成可玩作品",
+          "constraint_alignment": "被 constraint_no_programming、constraint_no_art、constraint_zero_budget 直接剪掉",
+          "status": "rejected"
+        },
+        {
+          "id": "opt_story_first",
+          "label": "想讲故事（故事优先）",
+          "pros": "可以用极低成本的形式实现",
+          "cons": "可能感觉不够酷",
+          "constraint_alignment": "符合 constraint_story_driven",
+          "status": "chosen"
+        }
+      ]
+    },
+    {
+      "id": "decision_02",
+      "question": "你愿意接受'不是游戏'的形式吗？",
+      "chosen_option_id": "opt_any_form",
+      "rationale": "讲故事的方式有很多，游戏只是成本最高的一种。必须降低形式要求，否则故事永远出不来。",
+      "abandoned_cost": "少一些'游戏'的标签",
+      "options": [
+        {
+          "id": "opt_must_game",
+          "label": "必须是'游戏'（可交互、可选择、有系统）",
+          "pros": "满足用户对'游戏'的想象",
+          "cons": "资源完全不足以支持",
+          "constraint_alignment": "被所有硬约束剪掉",
+          "status": "rejected"
+        },
+        {
+          "id": "opt_any_form",
+          "label": "可以是互动故事 / 视觉小说 / 网页小说",
+          "pros": "极低成本可实现，核心是故事",
+          "cons": "可能不符合用户对'游戏'的期待",
+          "constraint_alignment": "唯一可行路径",
+          "status": "chosen"
+        }
+      ]
+    },
+    {
+      "id": "decision_03",
+      "question": "成本排序（从低到高）",
+      "chosen_option_id": "opt_level_1",
+      "rationale": "必须从最低成本开始，否则热情会在学习曲线上耗尽。",
+      "abandoned_cost": "可能需要多做几个版本才能找到合适的形式",
+      "options": [
+        {
+          "id": "opt_level_1",
+          "label": "Level 1: 互动小说（纯文字，Twine / 网页）",
+          "pros": "成本最低，1-2周可出原型，零技术门槛",
+          "cons": "只有文字",
+          "constraint_alignment": "完美符合所有约束",
+          "status": "chosen"
+        },
+        {
+          "id": "opt_level_2",
+          "label": "Level 2: 互动小说 + 少量插画",
+          "pros": "比纯文字稍丰富",
+          "cons": "需要找/生成图片",
+          "constraint_alignment": "基本符合（需要一点美术资源）",
+          "status": "later"
+        },
+        {
+          "id": "opt_level_3",
+          "label": "Level 3: 视觉小说（Ren'Py）",
+          "pros": "有画面和声音，比网页小说正式",
+          "cons": "需要学一点 Ren'Py，需要图片和音乐资源",
+          "constraint_alignment": "部分符合（学习成本比 Unity 低，但依然有门槛）",
+          "status": "later"
+        },
+        {
+          "id": "opt_level_4",
+          "label": "Level 4: 更复杂的游戏形式（Unity / Godot 等）",
+          "pros": "最接近用户想象",
+          "cons": "学习成本极高，需要团队，需要资金",
+          "constraint_alignment": "被所有硬约束剪掉",
+          "status": "rejected"
+        }
+      ]
+    }
+  ],
+  "constraints_summary": {
+    "hard_constraints": [
+      "完全不会编程",
+      "不会画画、不会做音乐",
+      "预算为零",
+      "真正驱动的是'想讲这个故事'，而不是'做游戏'",
+      "对游戏理解停留在'选分支 + 多结局'"
+    ],
+    "fact_constraints": [
+      "用户是文科生，写过短篇",
+      "目前什么都没做（停留在脑子里）"
+    ],
+    "unknowns": [
+      "用户是否真的能接受'不是游戏'的形式",
+      "用户是否有耐心从 Level 1 开始，而不是直接冲高成本路径"
+    ]
+  },
+  "closure_status": {
+    "minimum_met": true,
+    "missing": [],
+    "recommendations": [
+      "必须明确禁止从高成本路径开始",
+      "必须让用户先回答'如果只能用文字+图片，还想讲吗？'",
+      "必须在开始前设定成功标准：'故事被体验'，而不是'做成了游戏'"
+    ]
+  },
+  "key_insights": [
+    "用户有三个致命硬约束：不会编程、不会美术、零预算。这几乎剪掉了所有技术路径。",
+    "用户真正想的是'讲故事'，而不是'做游戏'。这两个必须被拆开。",
+    "用户对游戏的理解严重停留在表面，必须被教育现实复杂度。",
+    "必须强制从最低成本（纯文字互动小说）开始，否则必然失败。",
+    "成功标准是'故事被体验'，而不是'做成了游戏'。"
+  ]
+}

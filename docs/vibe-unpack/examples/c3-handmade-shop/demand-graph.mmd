@@ -1,0 +1,100 @@
+%% Mermaid 可视化 - C3 手作店
+%% 重点：展示"被频繁打扰"是最大痛，建站不是核心
+
+graph TD
+    subgraph Anchor["初始支点"]
+        A["手作店需要网站门面<br/>'清爽一点就行'"]
+    end
+
+    subgraph Current["当前 workaround"]
+        W1["作品拍照修图"]
+        W2["发小红书 + 朋友圈"]
+        W3["私信沟通价格/定制/发货"]
+    end
+
+    subgraph Pains["痛点"]
+        P1["每天5-10个重复私信打扰"]
+        P2["缺少稳定门面，作品会被冲掉"]
+        P3["交易流程混乱"]
+    end
+
+    subgraph Constraints["硬约束"]
+        C1["完全不会前端、设计、开发"]
+        C2["预算500-1000元一次性"]
+        C3["实际上每月都要上新作品"]
+        C4["最大痛点是客服打扰，不是门面"]
+    end
+
+    subgraph Assumptions["隐性假设"]
+        AS1["以为建漂亮网站能解决所有问题"]
+        AS2["嘴上说'放上去就不管'<br/>但实际要持续更新"]
+    end
+
+    subgraph Decisions["关键决策"]
+        D1{"网站是核心还是客服减负是核心？"}
+        D2{"网站谁来维护？"}
+    end
+
+    subgraph Paths["路径"]
+        OPT_SITE["先做一个漂亮网站<br/>⚠️ 次要"]
+        OPT_CUSTOMER["先解决客服减负<br/>✅ 强烈推荐"]
+        OPT_SELF["用户自己维护<br/>❌ 被剪掉"]
+        OPT_TEMPLATE["no-code 模板<br/>✅ 唯一可行"]
+    end
+
+    subgraph Risks["风险"]
+        R1["建了网站但重复咨询没解决"]
+        R2["网站建好后因每月更新而荒废"]
+    end
+
+    subgraph Success["成功定义"]
+        S1["有稳定门面"]
+        S2["重复咨询大幅减少"]
+        S3["交易流程顺畅"]
+    end
+
+    subgraph Failure["失败定义"]
+        F1["做了网站但客户还是问同样问题"]
+        F2["网站更新一次后不再动了"]
+    end
+
+    A --> W1 --> W2 --> W3
+    W3 --> P1
+    W2 --> P2
+    W3 --> P3
+
+    C1 -->|直接剪掉| OPT_SELF
+    C4 -->|引导| D1
+    C1 -->|要求| D2
+
+    D1 -->|chosen_over| OPT_CUSTOMER
+    D1 -->|weakens| OPT_SITE
+    D2 -->|chosen_over| OPT_TEMPLATE
+    D2 -->|prunes| OPT_SELF
+
+    OPT_SITE -->|leads_to| R1
+    OPT_SELF -->|leads_to| R2
+
+    S2 -->|validates| P1
+    S1 -->|validates| P2
+
+    AS1 -.->|支撑| D1
+    AS2 -.->|支撑| D2
+
+    classDef anchor fill:#e3f2fd,stroke:#1976d2
+    classDef pain fill:#ffebee,stroke:#c62828
+    classDef constraint fill:#fff3e0,stroke:#e65100
+    classDef decision fill:#f3e5f5,stroke:#7b1fa2
+    classDef chosen fill:#c8e6c9,stroke:#2e7d32
+    classDef pruned fill:#ffcdd2,stroke:#b71c1c,stroke-dasharray: 5 5
+    classDef risk fill:#fce4ec,stroke:#880e4f
+    classDef success fill:#e8f5e9,stroke:#1b5e20
+
+    class A anchor
+    class P1,P2,P3 pain
+    class C1,C2,C3,C4 constraint
+    class D1,D2 decision
+    class OPT_CUSTOMER,OPT_TEMPLATE chosen
+    class OPT_SELF pruned
+    class R1,R2 risk
+    class S1,S2,S3 success

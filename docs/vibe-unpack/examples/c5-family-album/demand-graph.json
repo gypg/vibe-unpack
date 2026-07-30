@@ -1,0 +1,531 @@
+{
+  "version": "0.1",
+  "generated_at": "2026-07-31",
+  "anchor": "我想做一个家庭相册共享的东西。把家里人的照片、视频放到一个地方，大家都能看到和下载。不要用微信，因为微信空间有限，也不够整齐。",
+  "nodes": [
+    {
+      "id": "anchor_001",
+      "type": "Anchor",
+      "label": "家庭相册共享，不想用微信",
+      "source": "user_quote",
+      "evidence": "我想做一个家庭相册共享的东西。把家里人的照片、视频放到一个地方，大家都能看到和下载。不要用微信，因为微信空间有限，也不够整齐。",
+      "confidence": 1.0
+    },
+    {
+      "id": "workaround_01",
+      "type": "WorkaroundStep",
+      "label": "拍照片视频",
+      "step_order": 1,
+      "tool_used": "手机",
+      "time_cost": "即时",
+      "pain_level": 0,
+      "evidence": "日常拍摄"
+    },
+    {
+      "id": "workaround_02",
+      "type": "WorkaroundStep",
+      "label": "发到微信家庭群",
+      "step_order": 2,
+      "tool_used": "微信群",
+      "time_cost": "很快",
+      "pain_level": 2,
+      "evidence": "主要分享渠道"
+    },
+    {
+      "id": "workaround_03",
+      "type": "WorkaroundStep",
+      "label": "翻群历史找旧照片",
+      "step_order": 3,
+      "tool_used": "微信群历史",
+      "time_cost": "半小时以上",
+      "pain_level": 5,
+      "evidence": "想找半年前照片翻了半小时没找到"
+    },
+    {
+      "id": "workaround_04",
+      "type": "WorkaroundStep",
+      "label": "手动挑照片发给奶奶",
+      "step_order": 4,
+      "tool_used": "微信私聊",
+      "time_cost": "每次都要手动",
+      "pain_level": 4,
+      "evidence": "奶奶想看时，用户手动挑几张发给她"
+    },
+    {
+      "id": "pain_01",
+      "type": "PainPoint",
+      "label": "翻历史照片像大海捞针",
+      "frequency": "每周几次",
+      "severity": 4,
+      "user_quote": "想找半年前孩子过生日的照片，在群里翻了半小时还是没找到。",
+      "evidence": "翻微信群历史极度困难",
+      "source": "user_quote",
+      "confidence": 0.95
+    },
+    {
+      "id": "pain_02",
+      "type": "PainPoint",
+      "label": "奶奶看不到内容，只能靠我手动推送",
+      "frequency": "持续",
+      "severity": 5,
+      "evidence": "奶奶只会刷朋友圈和微信。群里的照片她不会主动点开看，更不会自己翻。",
+      "source": "user_quote",
+      "confidence": 0.95
+    },
+    {
+      "id": "pain_03",
+      "type": "PainPoint",
+      "label": "视频发不出 + 微信空间有限",
+      "frequency": "偶尔",
+      "severity": 3,
+      "evidence": "孩子跳舞的视频想发给奶奶，微信提示文件太大。只能剪成几段发。",
+      "source": "user_quote",
+      "confidence": 0.9
+    },
+    {
+      "id": "pain_04",
+      "type": "PainPoint",
+      "label": "隐私不放心（全在腾讯服务器）",
+      "frequency": "隐性持续",
+      "severity": 3,
+      "evidence": "家里所有照片都在腾讯服务器，我有点担心。",
+      "source": "user_quote",
+      "confidence": 0.8
+    },
+    {
+      "id": "constraint_grandma_zero",
+      "type": "Constraint",
+      "label": "奶奶只会用微信，不会下载 App，不会注册账号，不会操作复杂界面",
+      "constraint_category": "user_skill_level",
+      "hardness": "hard",
+      "consequence_if_violated": "任何需要奶奶主动打开新东西的方案都失败",
+      "evidence": "奶奶年纪大，只会用微信",
+      "source": "user_quote",
+      "confidence": 1.0
+    },
+    {
+      "id": "constraint_long_term",
+      "type": "Constraint",
+      "label": "希望照片发一次就永久保存，不希望平台倒闭后数据消失",
+      "constraint_category": "data_sensitivity",
+      "hardness": "medium-hard",
+      "evidence": "用户希望数据长期可控",
+      "source": "user_quote",
+      "confidence": 0.85
+    },
+    {
+      "id": "constraint_mobile_upload",
+      "type": "Constraint",
+      "label": "必须能从手机直接方便地上传",
+      "constraint_category": "time_budget",
+      "hardness": "hard",
+      "consequence_if_violated": "先传电脑再上传的方案不可接受",
+      "evidence": "日常用手机拍摄",
+      "source": "inferred",
+      "confidence": 0.9
+    },
+    {
+      "id": "constraint_privacy_vs_convenience",
+      "type": "Constraint",
+      "label": "用户在意隐私，但奶奶完全不在意，只在乎简单看到",
+      "constraint_category": "data_sensitivity",
+      "hardness": "soft-hard",
+      "evidence": "用户描述中的张力",
+      "source": "user_quote",
+      "confidence": 0.8
+    },
+    {
+      "id": "assumption_family_will_use_new_app",
+      "type": "Assumption",
+      "label": "用户以为家人都会用一个新 App/网站",
+      "risk_level": "high",
+      "validation_method": "奶奶技术能力为零",
+      "evidence": "奶奶只会用微信",
+      "source": "inferred",
+      "confidence": 0.95
+    },
+    {
+      "id": "assumption_self_backup_is_enough",
+      "type": "Assumption",
+      "label": "用户以为自己存一份备份就够了",
+      "risk_level": "high",
+      "validation_method": "奶奶看不到，用户还是得手动推送",
+      "evidence": "pain_02",
+      "source": "inferred",
+      "confidence": 0.9
+    },
+    {
+      "id": "assumption_self_hosted_nas_is_good",
+      "type": "Assumption",
+      "label": "用户可能以为自建 NAS + 相册软件是好方案",
+      "risk_level": "high",
+      "validation_method": "奶奶不会用网页或 App",
+      "evidence": "对老人是零价值",
+      "source": "inferred",
+      "confidence": 0.85
+    },
+    {
+      "id": "alternative_wechat",
+      "type": "Alternative",
+      "label": "继续只用微信群",
+      "status": "currently_using",
+      "evidence": "用户现在的主要做法"
+    },
+    {
+      "id": "success_01",
+      "type": "SuccessCriterion",
+      "label": "我拍完照片后，基本不用手动挑给奶奶，奶奶也能看到想看的",
+      "observable": "奶奶能自主查看部分内容",
+      "time_horizon": "6个月",
+      "evidence": "减少手动推送负担"
+    },
+    {
+      "id": "success_02",
+      "type": "SuccessCriterion",
+      "label": "我能快速翻到半年前的照片（1 分钟内）",
+      "observable": "翻找历史时间大幅下降",
+      "time_horizon": "持续",
+      "evidence": "直接回应 pain_01"
+    },
+    {
+      "id": "success_03",
+      "type": "SuccessCriterion",
+      "label": "视频不用剪切就能存下来",
+      "observable": "大文件能正常上传和存储",
+      "time_horizon": "持续",
+      "evidence": "回应 pain_03"
+    },
+    {
+      "id": "success_04",
+      "type": "SuccessCriterion",
+      "label": "如果某天我完全不管了，照片还在，且我能导出全部",
+      "observable": "数据可控 + 可导出",
+      "time_horizon": "长期",
+      "evidence": "长期性约束"
+    },
+    {
+      "id": "failure_01",
+      "type": "FailureCriterion",
+      "label": "奶奶还是只能靠我手动发微信",
+      "observable": "使用模式无变化",
+      "time_horizon": "3个月后",
+      "evidence": "定义失败"
+    },
+    {
+      "id": "failure_02",
+      "type": "FailureCriterion",
+      "label": "我想找旧照片还是要翻微信群",
+      "observable": "翻找时间无改善",
+      "time_horizon": "持续",
+      "evidence": "定义失败"
+    },
+    {
+      "id": "failure_03",
+      "type": "FailureCriterion",
+      "label": "用了新东西 1 个月后就荒废了",
+      "observable": "使用频率断崖式下降",
+      "time_horizon": "2个月内",
+      "evidence": "维护能力不足"
+    },
+    {
+      "id": "decision_01",
+      "type": "DecisionPoint",
+      "label": "统一平台还是混合方案？",
+      "question": "是要找一个平台让全家人都用，还是接受混合方案（奶奶看精选 + 自己完整存档）？",
+      "chosen_option_id": "opt_mixed",
+      "rationale": "奶奶技术能力为零，任何统一平台对她都无效。混合是唯一现实路径。",
+      "abandoned_cost": "不是‘一个地方’，管理稍复杂"
+    },
+    {
+      "id": "decision_01_opt_unified",
+      "type": "Alternative",
+      "label": "一个平台全家用",
+      "decision_point_id": "decision_01",
+      "pros": "整齐，管理简单",
+      "cons": "奶奶大概率不会用",
+      "constraint_alignment": "被 constraint_grandma_zero 直接剪掉",
+      "status": "rejected"
+    },
+    {
+      "id": "decision_01_opt_mixed",
+      "type": "Alternative",
+      "label": "混合（奶奶看精选 + 自己完整存档）",
+      "decision_point_id": "decision_01",
+      "pros": "现实可行，同时满足两个需求",
+      "cons": "不是一个地方",
+      "constraint_alignment": "唯一符合所有约束的选项",
+      "status": "chosen"
+    },
+    {
+      "id": "decision_02",
+      "type": "DecisionPoint",
+      "label": "奶奶如何查看？",
+      "question": "让奶奶下载新 App / 打开网页，还是自动/半自动推送到微信或极简链接？",
+      "chosen_option_id": "opt_push",
+      "rationale": "奶奶技术能力为零，只能走推送路线。",
+      "abandoned_cost": "奶奶看不到‘全部’，只能看精选"
+    },
+    {
+      "id": "decision_02_opt_app",
+      "type": "Alternative",
+      "label": "奶奶下载新 App / 打开网页",
+      "decision_point_id": "decision_02",
+      "pros": "能看到更多",
+      "cons": "奶奶不会用",
+      "constraint_alignment": "被 constraint_grandma_zero 直接剪掉",
+      "status": "rejected"
+    },
+    {
+      "id": "decision_02_opt_push",
+      "type": "Alternative",
+      "label": "自动/半自动推送到微信或极简链接",
+      "decision_point_id": "decision_02",
+      "pros": "符合奶奶现有习惯",
+      "cons": "推送内容需要筛选",
+      "constraint_alignment": "唯一可行选项",
+      "status": "chosen"
+    },
+    {
+      "id": "risk_01",
+      "type": "Risk",
+      "label": "纯自建 NAS 对奶奶是零价值",
+      "likelihood": "high",
+      "impact": "high",
+      "mitigation": "必须搭配推送机制",
+      "evidence": "constraint_grandma_zero"
+    },
+    {
+      "id": "risk_02",
+      "type": "Risk",
+      "label": "纯云方案（Google Photos / iCloud）违背隐私顾虑",
+      "likelihood": "medium",
+      "impact": "medium",
+      "mitigation": "混合方案中自己存档部分可用本地",
+      "evidence": "pain_04"
+    },
+    {
+      "id": "risk_03",
+      "type": "Risk",
+      "label": "混合方案可能导致‘两个地方’的混乱",
+      "likelihood": "medium",
+      "impact": "low",
+      "mitigation": "明确分工：精选推送 vs 完整存档",
+      "evidence": "decision_01"
+    }
+  ],
+  "edges": [
+    {
+      "source": "anchor_001",
+      "target": "workaround_01",
+      "relation": "expands_to",
+      "confidence": 1.0,
+      "evidence": "用户描述"
+    },
+    {
+      "source": "workaround_01",
+      "target": "workaround_02",
+      "relation": "then",
+      "confidence": 1.0,
+      "evidence": "日常分享流程"
+    },
+    {
+      "source": "workaround_02",
+      "target": "workaround_03",
+      "relation": "then",
+      "confidence": 1.0,
+      "evidence": "找历史记录的做法"
+    },
+    {
+      "source": "workaround_02",
+      "target": "workaround_04",
+      "relation": "then",
+      "confidence": 1.0,
+      "evidence": "给奶奶看的方式"
+    },
+    {
+      "source": "workaround_03",
+      "target": "pain_01",
+      "relation": "causes",
+      "confidence": 0.95,
+      "evidence": "微信群历史翻找困难"
+    },
+    {
+      "source": "workaround_04",
+      "target": "pain_02",
+      "relation": "causes",
+      "confidence": 0.95,
+      "evidence": "手动推送是负担"
+    },
+    {
+      "source": "workaround_02",
+      "target": "pain_03",
+      "relation": "causes",
+      "confidence": 0.9,
+      "evidence": "微信文件大小限制"
+    },
+    {
+      "source": "workaround_02",
+      "target": "pain_04",
+      "relation": "causes",
+      "confidence": 0.8,
+      "evidence": "数据全在腾讯"
+    },
+    {
+      "source": "constraint_grandma_zero",
+      "target": "decision_01_opt_unified",
+      "relation": "prunes",
+      "confidence": 1.0,
+      "evidence": "奶奶不会用新平台"
+    },
+    {
+      "source": "constraint_grandma_zero",
+      "target": "decision_02_opt_app",
+      "relation": "prunes",
+      "confidence": 1.0,
+      "evidence": "奶奶不会下载 App"
+    },
+    {
+      "source": "constraint_privacy_vs_convenience",
+      "target": "alternative_wechat",
+      "relation": "contradicts",
+      "confidence": 0.85,
+      "evidence": "用户在意隐私但继续用微信"
+    },
+    {
+      "source": "decision_01",
+      "target": "decision_01_opt_mixed",
+      "relation": "chosen_over",
+      "confidence": 0.9,
+      "evidence": "唯一现实路径"
+    },
+    {
+      "source": "decision_02",
+      "target": "decision_02_opt_push",
+      "relation": "chosen_over",
+      "confidence": 0.95,
+      "evidence": "必须走推送路线"
+    },
+    {
+      "source": "decision_01_opt_unified",
+      "target": "risk_01",
+      "relation": "leads_to_risk",
+      "confidence": 0.95,
+      "evidence": "纯自建对奶奶无效"
+    },
+    {
+      "source": "alternative_wechat",
+      "target": "risk_02",
+      "relation": "leads_to_risk",
+      "confidence": 0.8,
+      "evidence": "继续用微信违背隐私顾虑"
+    },
+    {
+      "source": "success_01",
+      "target": "pain_02",
+      "relation": "validates",
+      "confidence": 1.0,
+      "evidence": "奶奶能看到直接回应最大痛"
+    },
+    {
+      "source": "success_02",
+      "target": "pain_01",
+      "relation": "validates",
+      "confidence": 1.0,
+      "evidence": "快速翻找回应翻历史痛"
+    },
+    {
+      "source": "assumption_family_will_use_new_app",
+      "target": "decision_01",
+      "relation": "assumes",
+      "confidence": 0.95,
+      "evidence": "用户默认统一平台可行"
+    },
+    {
+      "source": "assumption_self_backup_is_enough",
+      "target": "decision_01_opt_unified",
+      "relation": "assumes",
+      "confidence": 0.9,
+      "evidence": "忽略了奶奶看不到的问题"
+    }
+  ],
+  "decision_points": [
+    {
+      "id": "decision_01",
+      "question": "统一平台还是混合方案？",
+      "chosen_option_id": "opt_mixed",
+      "rationale": "奶奶技术能力为零，任何统一平台对她都无效。混合是唯一现实路径。",
+      "abandoned_cost": "不是一个地方，管理稍复杂",
+      "options": [
+        {
+          "id": "opt_unified",
+          "label": "一个平台全家用",
+          "pros": "整齐，管理简单",
+          "cons": "奶奶大概率不会用",
+          "constraint_alignment": "被 constraint_grandma_zero 直接剪掉",
+          "status": "rejected"
+        },
+        {
+          "id": "opt_mixed",
+          "label": "混合（奶奶看精选 + 自己完整存档）",
+          "pros": "现实可行，同时满足两个需求",
+          "cons": "不是一个地方",
+          "constraint_alignment": "唯一符合所有约束的选项",
+          "status": "chosen"
+        }
+      ]
+    },
+    {
+      "id": "decision_02",
+      "question": "奶奶如何查看？",
+      "chosen_option_id": "opt_push",
+      "rationale": "奶奶技术能力为零，只能走推送路线。",
+      "abandoned_cost": "奶奶看不到全部，只能看精选",
+      "options": [
+        {
+          "id": "opt_app",
+          "label": "奶奶下载新 App / 打开网页",
+          "pros": "能看到更多",
+          "cons": "奶奶不会用",
+          "constraint_alignment": "被 constraint_grandma_zero 直接剪掉",
+          "status": "rejected"
+        },
+        {
+          "id": "opt_push",
+          "label": "自动/半自动推送到微信或极简链接",
+          "pros": "符合奶奶现有习惯",
+          "cons": "推送内容需要筛选",
+          "constraint_alignment": "唯一可行选项",
+          "status": "chosen"
+        }
+      ]
+    }
+  ],
+  "constraints_summary": {
+    "hard_constraints": [
+      "奶奶只会用微信，不会下载 App，不会注册账号，不会操作复杂界面",
+      "必须能从手机直接方便地上传",
+      "奶奶技术能力为零，任何需要她主动操作的方案都无效"
+    ],
+    "medium_hard_constraints": [
+      "希望照片发一次就永久保存",
+      "用户在意隐私，但奶奶完全不在意"
+    ],
+    "unknowns": [
+      "用户是否真的能接受‘奶奶只能看精选’这个现实"
+    ]
+  },
+  "closure_status": {
+    "minimum_met": true,
+    "missing": [],
+    "recommendations": [
+      "必须明确接受混合方案",
+      "任何推送机制都必须极简到接近微信"
+    ]
+  },
+  "key_insights": [
+    "奶奶技术能力为零是硬约束，任何统一新平台都对她无效",
+    "用户在意隐私和长期性，但奶奶只在乎简单看到 —— 这是张力",
+    "混合方案（精选推送 + 完整存档）是唯一现实路径",
+    "自建 NAS 对奶奶是零价值，必须搭配推送机制"
+  ]
+}

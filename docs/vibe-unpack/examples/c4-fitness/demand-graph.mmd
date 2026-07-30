@@ -1,0 +1,101 @@
+%% Mermaid 可视化 - C4 健身
+%% 重点：技术能力强 vs 执行力低的冲突
+
+graph TD
+    subgraph Anchor["初始支点"]
+        A["健身打卡 + 进步曲线<br/>'想激励自己坚持'"]
+    end
+
+    subgraph Current["当前 workaround"]
+        W1["健身后备忘录记动作+重量"]
+        W2["偶尔手动复制到 Excel 画图"]
+    end
+
+    subgraph Pains["痛点"]
+        P1["记录不是问题，坚持才是"]
+        P2["想看曲线太麻烦"]
+        P3["数据太详细反而不想记"]
+    end
+
+    subgraph Constraints["硬约束"]
+        C1["技术能力强（程序员）"]
+        C2["执行力低，对自己没信心"]
+        C3["每条数据必须 10 秒内搞定"]
+        C4["主要激励来源是看到自己进步"]
+    end
+
+    subgraph Assumptions["隐性假设"]
+        AS1["以为做好记录工具就能坚持"]
+        AS2["以为需要漂亮曲线和大量数据"]
+    end
+
+    subgraph Decisions["关键决策"]
+        D1{"技术上激进 vs 极简摩擦？"}
+        D2{"工具能解决坚持问题吗？"}
+    end
+
+    subgraph Paths["路径"]
+        OPT_POWERFUL["强大的自建系统<br/>❌ 被剪掉"]
+        OPT_SIMPLE["极简工具（一行输入，10秒）<br/>✅ 强烈推荐"]
+        OPT_DIRECT["直接做工具<br/>⚠️ 可能治标不治本"]
+        OPT_VERIFY["先用 2 周备忘录验证<br/>✅ 强烈推荐"]
+    end
+
+    subgraph Risks["风险"]
+        R1["复杂系统增加摩擦，更早放弃"]
+        R2["技术解决不了执行力问题"]
+    end
+
+    subgraph Success["成功定义"]
+        S1["持续记录至少 80% 的训练"]
+        S2["10 秒内看到'今天比上周强'"]
+        S3["看到数据后有动力继续练"]
+    end
+
+    subgraph Failure["失败定义"]
+        F1["记了 3 天就放弃"]
+        F2["工具太麻烦，宁愿用备忘录"]
+        F3["看了数据还是不想练"]
+    end
+
+    A --> W1 --> W2
+    W2 --> P2
+    C2 --> P1
+    C3 --> P3
+
+    C1 -->|允许| D1
+    C2 -->|强烈要求| D1
+    C3 -->|直接剪掉| OPT_POWERFUL
+    C2 -->|直接剪掉| OPT_POWERFUL
+
+    D1 -->|chosen_over| OPT_SIMPLE
+    D1 -->|prunes| OPT_POWERFUL
+    D2 -->|chosen_over| OPT_VERIFY
+    D2 -->|weakens| OPT_DIRECT
+
+    OPT_POWERFUL -->|leads_to| R1
+    OPT_DIRECT -->|leads_to| R2
+
+    S1 -->|validates| P1
+    S2 -->|validates| P2
+
+    AS1 -.->|支撑| D2
+    AS2 -.->|支撑| D1
+
+    classDef anchor fill:#e3f2fd,stroke:#1976d2
+    classDef pain fill:#ffebee,stroke:#c62828
+    classDef constraint fill:#fff3e0,stroke:#e65100
+    classDef decision fill:#f3e5f5,stroke:#7b1fa2
+    classDef chosen fill:#c8e6c9,stroke:#2e7d32
+    classDef pruned fill:#ffcdd2,stroke:#b71c1c,stroke-dasharray: 5 5
+    classDef risk fill:#fce4ec,stroke:#880e4f
+    classDef success fill:#e8f5e9,stroke:#1b5e20
+
+    class A anchor
+    class P1,P2,P3 pain
+    class C1,C2,C3,C4 constraint
+    class D1,D2 decision
+    class OPT_SIMPLE,OPT_VERIFY chosen
+    class OPT_POWERFUL,OPT_DIRECT pruned
+    class R1,R2 risk
+    class S1,S2,S3 success

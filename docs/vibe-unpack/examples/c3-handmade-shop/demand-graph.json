@@ -1,0 +1,444 @@
+{
+  "version": "0.1",
+  "generated_at": "2026-07-31",
+  "anchor": "给我的小手作店做一个网站。把作品放上去，别人能看到、能联系我买。不要太花哨，就清爽一点就行。",
+  "nodes": [
+    {
+      "id": "anchor_001",
+      "type": "Anchor",
+      "label": "手作店需要一个清爽的网站门面",
+      "source": "user_quote",
+      "evidence": "给我的小手作店做一个网站。把作品放上去，别人能看到、能联系我买。不要太花哨，就清爽一点就行。",
+      "confidence": 1.0
+    },
+    {
+      "id": "workaround_01",
+      "type": "WorkaroundStep",
+      "label": "作品拍照修图",
+      "step_order": 1,
+      "tool_used": "手机 + 简单修图",
+      "time_cost": "每次30-60分钟",
+      "pain_level": 2,
+      "evidence": "做完作品后，拍照、修图"
+    },
+    {
+      "id": "workaround_02",
+      "type": "WorkaroundStep",
+      "label": "发小红书 + 朋友圈",
+      "step_order": 2,
+      "tool_used": "小红书 + 朋友圈",
+      "time_cost": "每次30-60分钟",
+      "pain_level": 3,
+      "evidence": "发小红书（图文/视频）"
+    },
+    {
+      "id": "workaround_03",
+      "type": "WorkaroundStep",
+      "label": "私信沟通价格/定制/发货",
+      "step_order": 3,
+      "tool_used": "微信私信",
+      "time_cost": "每天被打扰多次",
+      "pain_level": 5,
+      "evidence": "有人私信问价/问能不能定制 → 私聊沟通"
+    },
+    {
+      "id": "pain_01",
+      "type": "PainPoint",
+      "label": "每天5-10个重复私信打扰",
+      "frequency": "每天多次",
+      "severity": 4,
+      "evidence": "每天小红书都有5-10个私信，问价格、问能不能定制。我得一个一个回。",
+      "source": "user_quote",
+      "confidence": 0.95
+    },
+    {
+      "id": "pain_02",
+      "type": "PainPoint",
+      "label": "缺少稳定门面，作品会被冲掉",
+      "frequency": "新客户问时",
+      "severity": 3,
+      "evidence": "别人问'你的作品都在哪里看'，我只能说'小红书搜我名字'，但内容会被冲掉。",
+      "source": "user_quote",
+      "confidence": 0.9
+    },
+    {
+      "id": "pain_03",
+      "type": "PainPoint",
+      "label": "交易流程混乱（忘发货、讨价还价、客服乱）",
+      "frequency": "每月几单",
+      "severity": 3,
+      "evidence": "有人付了钱我忘了发货、有的人问发货时间我回答得很乱。",
+      "source": "user_quote",
+      "confidence": 0.85
+    },
+    {
+      "id": "constraint_no_code",
+      "type": "Constraint",
+      "label": "完全不会前端，不会设计，不会开发",
+      "constraint_category": "skill_level",
+      "hardness": "hard",
+      "consequence_if_violated": "任何需要自己写代码、维护服务器的方案都不可行",
+      "evidence": "用户明确：完全不会前端",
+      "source": "user_quote",
+      "confidence": 1.0
+    },
+    {
+      "id": "constraint_budget",
+      "type": "Constraint",
+      "label": "预算500-1000元一次性，不愿意持续订阅",
+      "constraint_category": "budget",
+      "hardness": "soft-hard",
+      "consequence_if_violated": "月度订阅方案让用户心疼钱",
+      "evidence": "用户愿意一次性投入500-1000元",
+      "source": "user_quote",
+      "confidence": 0.9
+    },
+    {
+      "id": "constraint_update",
+      "type": "Constraint",
+      "label": "实际上每月都要上新作品",
+      "constraint_category": "maintenance_capacity",
+      "hardness": "fact",
+      "evidence": "用户做手作赚钱的方式就是持续上新",
+      "source": "inferred",
+      "confidence": 0.95
+    },
+    {
+      "id": "constraint_real_pain",
+      "type": "Constraint",
+      "label": "最大痛点是客服打扰，而不是缺少门面",
+      "constraint_category": "success_definition",
+      "hardness": "hard",
+      "evidence": "每天5-10个私信是用户描述中最强烈的痛",
+      "source": "user_quote",
+      "confidence": 0.95
+    },
+    {
+      "id": "assumption_website_fixes_all",
+      "type": "Assumption",
+      "label": "用户以为建一个漂亮网站就能解决所有问题",
+      "risk_level": "high",
+      "validation_method": "已发现：最大痛是重复咨询，网站本身不能减少打扰",
+      "evidence": "用户反复提到被私信打扰",
+      "source": "inferred",
+      "confidence": 0.9
+    },
+    {
+      "id": "assumption_self_maintain",
+      "type": "Assumption",
+      "label": "用户嘴上说'放上去就不管'，但实际上必须持续更新",
+      "risk_level": "high",
+      "validation_method": "用户自己说每月上新",
+      "evidence": "这是手作店的生意模式",
+      "source": "contradiction",
+      "confidence": 0.95
+    },
+    {
+      "id": "alternative_xiaohongshu",
+      "type": "Alternative",
+      "label": "继续只用小红书 + 朋友圈 + 微信",
+      "status": "currently_using",
+      "evidence": "用户现在的主要渠道"
+    },
+    {
+      "id": "success_01",
+      "type": "SuccessCriterion",
+      "label": "有稳定门面，新客户能看到全部作品",
+      "observable": "新客户不需要我重复介绍作品",
+      "time_horizon": "3-6个月",
+      "evidence": "用户期望"
+    },
+    {
+      "id": "success_02",
+      "type": "SuccessCriterion",
+      "label": "重复咨询（价格、定制）大幅减少",
+      "observable": "每天被打扰次数明显下降",
+      "time_horizon": "持续",
+      "evidence": "用户每天5-10个私信是最大痛"
+    },
+    {
+      "id": "success_03",
+      "type": "SuccessCriterion",
+      "label": "交易流程顺畅，不会忘发货",
+      "observable": "客户能自己看到发货信息",
+      "time_horizon": "持续",
+      "evidence": "用户描述的混乱"
+    },
+    {
+      "id": "failure_01",
+      "type": "FailureCriterion",
+      "label": "做了网站但客户还是绕过来问同样问题",
+      "observable": "重复咨询没有减少",
+      "time_horizon": "3个月后",
+      "evidence": "只解决展示不解决客服"
+    },
+    {
+      "id": "failure_02",
+      "type": "FailureCriterion",
+      "label": "网站更新一次后就不再动了",
+      "observable": "老作品挂着，新作品没放上去",
+      "time_horizon": "1-2个月",
+      "evidence": "用户说'放上去就不管'但实际需要持续更新"
+    },
+    {
+      "id": "decision_01",
+      "type": "DecisionPoint",
+      "label": "网站是核心还是客服减负是核心？",
+      "question": "优先解决展示门面，还是优先解决被频繁打扰的客服问题？",
+      "chosen_option_id": "opt_customer_first",
+      "rationale": "用户每天被5-10个重复私信打扰，这是比'没有网站'更刚性的痛。建网站不能自动减少打扰。",
+      "abandoned_cost": "短期内门面看起来不够专业"
+    },
+    {
+      "id": "decision_01_opt_site",
+      "type": "Alternative",
+      "label": "先做一个漂亮网站",
+      "decision_point_id": "decision_01",
+      "pros": "用户明确想要门面",
+      "cons": "网站本身不能减少重复咨询",
+      "constraint_alignment": "被 constraint_real_pain 弱化",
+      "status": "secondary"
+    },
+    {
+      "id": "decision_01_opt_customer",
+      "type": "Alternative",
+      "label": "先解决客服减负（自动回复常见问题）",
+      "decision_point_id": "decision_01",
+      "pros": "直接解决最大痛点，零成本，立即见效",
+      "cons": "短期内门面还是小红书",
+      "constraint_alignment": "强烈符合 constraint_real_pain",
+      "status": "chosen"
+    },
+    {
+      "id": "decision_02",
+      "type": "DecisionPoint",
+      "label": "网站谁来维护？",
+      "question": "用户自己维护，还是完全模板化/自动化？",
+      "chosen_option_id": "opt_no_code_template",
+      "rationale": "用户完全不会代码 + 不愿意持续投入精力，必须走极低维护路线。",
+      "abandoned_cost": "模板选择有限，个性化受限"
+    },
+    {
+      "id": "decision_02_opt_self",
+      "type": "Alternative",
+      "label": "用户自己写代码 / 自己维护",
+      "decision_point_id": "decision_02",
+      "pros": "成本低，自由度高",
+      "cons": "用户完全没能力 + 没意愿",
+      "constraint_alignment": "被 constraint_no_code 直接剪掉",
+      "status": "rejected"
+    },
+    {
+      "id": "decision_02_opt_template",
+      "type": "Alternative",
+      "label": "no-code 模板，用户只填内容",
+      "decision_point_id": "decision_02",
+      "pros": "维护成本极低，符合预算和能力",
+      "cons": "选择有限",
+      "constraint_alignment": "完美符合所有硬约束",
+      "status": "chosen"
+    },
+    {
+      "id": "risk_01",
+      "type": "Risk",
+      "label": "建了网站但重复咨询问题没解决，等于没解决问题",
+      "likelihood": "high",
+      "impact": "high",
+      "mitigation": "必须先做客服减负验证",
+      "decision_point_id": "decision_01"
+    },
+    {
+      "id": "risk_02",
+      "type": "Risk",
+      "label": "网站建好后因为每月要更新而逐渐荒废",
+      "likelihood": "high",
+      "impact": "medium",
+      "mitigation": "选择极简更新流程的 no-code 平台",
+      "decision_point_id": "decision_02"
+    }
+  ],
+  "edges": [
+    {
+      "source": "anchor_001",
+      "target": "workaround_01",
+      "relation": "expands_to",
+      "confidence": 1.0,
+      "evidence": "用户描述"
+    },
+    {
+      "source": "workaround_01",
+      "target": "workaround_02",
+      "relation": "then",
+      "confidence": 1.0,
+      "evidence": "发作品流程"
+    },
+    {
+      "source": "workaround_02",
+      "target": "workaround_03",
+      "relation": "then",
+      "confidence": 1.0,
+      "evidence": "沟通流程"
+    },
+    {
+      "source": "workaround_03",
+      "target": "pain_01",
+      "relation": "causes",
+      "confidence": 0.95,
+      "evidence": "私信沟通是最大痛点"
+    },
+    {
+      "source": "workaround_02",
+      "target": "pain_02",
+      "relation": "causes",
+      "confidence": 0.9,
+      "evidence": "小红书内容易被冲掉"
+    },
+    {
+      "source": "workaround_03",
+      "target": "pain_03",
+      "relation": "causes",
+      "confidence": 0.85,
+      "evidence": "手动交易流程混乱"
+    },
+    {
+      "source": "constraint_no_code",
+      "target": "decision_02_opt_self",
+      "relation": "prunes",
+      "confidence": 1.0,
+      "evidence": "用户完全不会代码"
+    },
+    {
+      "source": "constraint_real_pain",
+      "target": "decision_01_opt_site",
+      "relation": "weakens",
+      "confidence": 0.9,
+      "evidence": "网站不能解决客服痛"
+    },
+    {
+      "source": "decision_01",
+      "target": "decision_01_opt_customer",
+      "relation": "chosen_over",
+      "confidence": 0.85,
+      "evidence": "客服减负优先"
+    },
+    {
+      "source": "decision_02",
+      "target": "decision_02_opt_template",
+      "relation": "chosen_over",
+      "confidence": 0.95,
+      "evidence": "唯一可行路径"
+    },
+    {
+      "source": "decision_01_opt_site",
+      "target": "risk_01",
+      "relation": "leads_to_risk",
+      "confidence": 0.9,
+      "evidence": "只解决展示不解决客服"
+    },
+    {
+      "source": "decision_02_opt_self",
+      "target": "risk_02",
+      "relation": "leads_to_risk",
+      "confidence": 0.95,
+      "evidence": "自己维护会导致荒废"
+    },
+    {
+      "source": "success_02",
+      "target": "pain_01",
+      "relation": "validates",
+      "confidence": 1.0,
+      "evidence": "减少打扰直接回应最大痛"
+    },
+    {
+      "source": "assumption_website_fixes_all",
+      "target": "decision_01",
+      "relation": "assumes",
+      "confidence": 0.9,
+      "evidence": "用户默认建站能解决一切"
+    },
+    {
+      "source": "constraint_update",
+      "target": "assumption_self_maintain",
+      "relation": "contradicts",
+      "confidence": 0.95,
+      "evidence": "用户说不管但实际要持续更新"
+    }
+  ],
+  "decision_points": [
+    {
+      "id": "decision_01",
+      "question": "网站是核心还是客服减负是核心？",
+      "chosen_option_id": "opt_customer_first",
+      "rationale": "用户每天被5-10个重复私信打扰，这是比'没有网站'更刚性的痛。建网站不能自动减少打扰。",
+      "abandoned_cost": "短期内门面看起来不够专业",
+      "options": [
+        {
+          "id": "opt_site",
+          "label": "先做一个漂亮网站",
+          "pros": "用户明确想要门面",
+          "cons": "网站本身不能减少重复咨询",
+          "constraint_alignment": "被 constraint_real_pain 弱化",
+          "status": "secondary"
+        },
+        {
+          "id": "opt_customer_first",
+          "label": "先解决客服减负（自动回复常见问题）",
+          "pros": "直接解决最大痛点，零成本，立即见效",
+          "cons": "短期内门面还是小红书",
+          "constraint_alignment": "强烈符合 constraint_real_pain",
+          "status": "chosen"
+        }
+      ]
+    },
+    {
+      "id": "decision_02",
+      "question": "网站谁来维护？",
+      "chosen_option_id": "opt_no_code_template",
+      "rationale": "用户完全不会代码 + 不愿意持续投入精力，必须走极低维护路线。",
+      "abandoned_cost": "模板选择有限，个性化受限",
+      "options": [
+        {
+          "id": "opt_self",
+          "label": "用户自己写代码 / 自己维护",
+          "pros": "成本低，自由度高",
+          "cons": "用户完全没能力 + 没意愿",
+          "constraint_alignment": "被 constraint_no_code 直接剪掉",
+          "status": "rejected"
+        },
+        {
+          "id": "opt_no_code_template",
+          "label": "no-code 模板，用户只填内容",
+          "pros": "维护成本极低，符合预算和能力",
+          "cons": "选择有限",
+          "constraint_alignment": "完美符合所有硬约束",
+          "status": "chosen"
+        }
+      ]
+    }
+  ],
+  "constraints_summary": {
+    "hard_constraints": [
+      "完全不会前端、设计、开发",
+      "实际上每月都要上新作品",
+      "最大痛点是客服打扰，不是缺少门面",
+      "预算有限，不愿意持续订阅"
+    ],
+    "unknowns": [
+      "用户是否真的愿意先做客服减负验证，而不是直接建站"
+    ]
+  },
+  "closure_status": {
+    "minimum_met": true,
+    "missing": [],
+    "recommendations": [
+      "必须让用户先验证客服减负 2 周",
+      "建站必须走 no-code + 极低更新成本路线"
+    ]
+  },
+  "key_insights": [
+    "用户最大的痛是每天被重复私信打扰，而不是没有网站",
+    "建网站不能自动解决客服问题，这是关键洞见",
+    "用户嘴上说'放上去就不管'，但实际每月要更新 —— 这个矛盾必须被处理",
+    "no-code 模板 + 只填内容 是唯一符合所有约束的路径"
+  ]
+}

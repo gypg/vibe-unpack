@@ -1,0 +1,93 @@
+%% C2 记账场景 - Mermaid 图
+%% 重点：展示"做 App"这条路如何被剪掉
+
+graph TD
+    subgraph Anchor["初始支点"]
+        A["要做一个记账 App<br/>'简单，不要像现有软件复杂'"]
+    end
+
+    subgraph Workaround["当前 workaround"]
+        W1["信用卡消费不记"]
+        W2["偶尔备忘录记一笔"]
+        W3["月底对账 2-3 小时"]
+    end
+
+    subgraph Pains["痛点"]
+        P1["月底对账极度痛苦"]
+        P2["分类判断疲劳"]
+        P3["现有 App 太复杂"]
+    end
+
+    subgraph Constraints["硬约束"]
+        C1["Excel 用得还可以<br/>但讨厌分类"]
+        C2["不想学复杂操作"]
+        C3["信用卡账单已有数据"]
+        C4["真实需求是快速看大类"]
+    end
+
+    subgraph Assumptions["隐性假设"]
+        AS1["以为一定要新 App"]
+        AS2["以为分类必须精细"]
+    end
+
+    subgraph Decisions["关键决策"]
+        D1{"要不要做新 App？"}
+        D2{"分类要不要精细？"}
+    end
+
+    subgraph Paths["路径"]
+        OPT_APP["做新 App<br/>❌ 被剪掉"]
+        OPT_EXCEL["优化现有 Excel<br/>✅ 强烈推荐"]
+        OPT_FINE["20 个细分分类<br/>❌ 被剪掉"]
+        OPT_COARSE["4-5 个粗分类<br/>✅ 强烈推荐"]
+    end
+
+    subgraph Risks["风险"]
+        R1["重复'装 App → 卸载'历史"]
+    end
+
+    subgraph Success["成功定义"]
+        S1["月底对账从 2-3h → 30min"]
+        S2["快速看到'孩子花多少'"]
+    end
+
+    A --> W1 --> W2 --> W3
+    W3 --> P1
+    W3 --> P2
+    P3 --> A
+
+    C1 -->|强烈反对| OPT_APP
+    C2 -->|强烈反对| OPT_APP
+    C3 -->|强烈反对| OPT_APP
+    C1 -->|直接剪掉| OPT_FINE
+
+    D1 -->|chosen_over| OPT_EXCEL
+    D1 -->|prunes| OPT_APP
+    D2 -->|chosen_over| OPT_COARSE
+    D2 -->|prunes| OPT_FINE
+
+    OPT_APP -->|leads_to| R1
+
+    S1 -->|validates| P1
+    S2 -->|validates| P2
+
+    AS1 -.->|支撑| D1
+    AS2 -.->|支撑| D2
+
+    classDef anchor fill:#e3f2fd,stroke:#1976d2
+    classDef pain fill:#ffebee,stroke:#c62828
+    classDef constraint fill:#fff3e0,stroke:#e65100
+    classDef decision fill:#f3e5f5,stroke:#7b1fa2
+    classDef chosen fill:#c8e6c9,stroke:#2e7d32
+    classDef pruned fill:#ffcdd2,stroke:#b71c1c,stroke-dasharray: 5 5
+    classDef risk fill:#fce4ec,stroke:#880e4f
+    classDef success fill:#e8f5e9,stroke:#1b5e20
+
+    class A anchor
+    class P1,P2,P3 pain
+    class C1,C2,C3,C4 constraint
+    class D1,D2 decision
+    class OPT_EXCEL,OPT_COARSE chosen
+    class OPT_APP,OPT_FINE pruned
+    class R1 risk
+    class S1,S2 success

@@ -1,0 +1,108 @@
+%% Mermaid 可视化 - C5 家庭相册
+%% 重点：奶奶技术能力为零如何剪掉几乎所有方案
+
+graph TD
+    subgraph Anchor["初始支点"]
+        A["家庭相册共享<br/>'不想用微信'"]
+    end
+
+    subgraph Current["当前 workaround"]
+        W1["拍照片视频"]
+        W2["发微信家庭群"]
+        W3["翻群历史找旧照片"]
+        W4["手动挑照片发给奶奶"]
+    end
+
+    subgraph Pains["痛点"]
+        P1["翻历史像大海捞针"]
+        P2["奶奶看不到，只能靠我手动推送"]
+        P3["视频发不出 + 空间有限"]
+        P4["隐私不放心（全在腾讯）"]
+    end
+
+    subgraph Constraints["硬约束"]
+        C1["奶奶只会用微信<br/>不会下载 App/注册/操作复杂界面"]
+        C2["希望发一次就永久保存"]
+        C3["必须能从手机直接上传"]
+        C4["用户在意隐私，奶奶不在意"]
+    end
+
+    subgraph Assumptions["隐性假设"]
+        AS1["以为家人都会用新 App/网站"]
+        AS2["以为自己存一份备份就够"]
+        AS3["以为自建 NAS 是好方案"]
+    end
+
+    subgraph Decisions["关键决策"]
+        D1{"统一平台还是混合？"}
+        D2{"奶奶如何查看？"}
+    end
+
+    subgraph Paths["路径"]
+        OPT_UNIFIED["一个平台全家用<br/>❌ 被剪掉"]
+        OPT_MIXED["混合（奶奶看精选 + 自己存档）<br/>✅ 强烈推荐"]
+        OPT_APP["奶奶下载新 App/网页<br/>❌ 被剪掉"]
+        OPT_PUSH["自动/半自动推送到微信<br/>✅ 强烈推荐"]
+    end
+
+    subgraph Risks["风险"]
+        R1["纯自建对奶奶是零价值"]
+        R2["继续用微信违背隐私顾虑"]
+    end
+
+    subgraph Success["成功定义"]
+        S1["拍完后奶奶能看到想看的"]
+        S2["我 1 分钟内翻到半年前照片"]
+        S3["视频不用剪就能存"]
+        S4["我不管了，照片还在且能导出"]
+    end
+
+    subgraph Failure["失败定义"]
+        F1["奶奶还是只能靠我手动发微信"]
+        F2["找旧照片还是翻微信群"]
+        F3["用了新东西 1 个月就荒废"]
+    end
+
+    A --> W1 --> W2 --> W3
+    W2 --> W4
+    W3 --> P1
+    W4 --> P2
+    W2 --> P3
+    W2 --> P4
+
+    C1 -->|直接剪掉| OPT_UNIFIED
+    C1 -->|直接剪掉| OPT_APP
+
+    D1 -->|chosen_over| OPT_MIXED
+    D1 -->|prunes| OPT_UNIFIED
+    D2 -->|chosen_over| OPT_PUSH
+    D2 -->|prunes| OPT_APP
+
+    OPT_UNIFIED -->|leads_to| R1
+    OPT_APP -->|leads_to| R1
+    alternative_wechat -.->|leads_to| R2
+
+    S1 -->|validates| P2
+    S2 -->|validates| P1
+
+    AS1 -.->|支撑| D1
+    AS2 -.->|支撑| D1
+    AS3 -.->|支撑| OPT_UNIFIED
+
+    classDef anchor fill:#e3f2fd,stroke:#1976d2
+    classDef pain fill:#ffebee,stroke:#c62828
+    classDef constraint fill:#fff3e0,stroke:#e65100
+    classDef decision fill:#f3e5f5,stroke:#7b1fa2
+    classDef chosen fill:#c8e6c9,stroke:#2e7d32
+    classDef pruned fill:#ffcdd2,stroke:#b71c1c,stroke-dasharray: 5 5
+    classDef risk fill:#fce4ec,stroke:#880e4f
+    classDef success fill:#e8f5e9,stroke:#1b5e20
+
+    class A anchor
+    class P1,P2,P3,P4 pain
+    class C1,C2,C3,C4 constraint
+    class D1,D2 decision
+    class OPT_MIXED,OPT_PUSH chosen
+    class OPT_UNIFIED,OPT_APP pruned
+    class R1,R2 risk
+    class S1,S2,S3,S4 success

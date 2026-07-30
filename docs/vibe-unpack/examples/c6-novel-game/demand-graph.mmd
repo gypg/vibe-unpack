@@ -1,0 +1,126 @@
+%% Mermaid 可视化 - C6 小说游戏
+%% 重点：展示所有技术路径如何被剪掉
+
+graph TD
+    subgraph Anchor["初始支点"]
+        A["有一个故事<br/>'想做成像原神或文字冒险游戏'"]
+    end
+
+    subgraph Background["用户背景"]
+        B1["文科生，写过短篇"]
+        B2["完全不会编程"]
+        B3["不会画画、不会做音乐"]
+        B4["预算为零"]
+        B5["对游戏理解停留在'选分支+结局'"]
+    end
+
+    subgraph Pains["痛点 / 冲突"]
+        P1["想讲故事，但不知道怎么呈现"]
+        P2["对游戏复杂度严重低估"]
+        P3["完全没有资源"]
+    end
+
+    subgraph Constraints["致命硬约束"]
+        C1["完全不会编程"]
+        C2["不会画画、不会做音乐"]
+        C3["预算为零"]
+        C4["真正驱动的是'讲故事'"]
+        C5["对游戏理解停留在表面"]
+    end
+
+    subgraph Assumptions["危险假设"]
+        AS1["以为'讲故事'=必须'做游戏'"]
+        AS2["以为'选分支'是核心价值"]
+        AS3["以为可以边学边做"]
+        AS4["幻想最终形态是'原神'级别"]
+    end
+
+    subgraph Decisions["关键决策"]
+        D1{"想讲故事 vs 想做游戏？"}
+        D2{"愿意接受'不是游戏'的形式吗？"}
+        D3{"从哪个成本级别开始？"}
+    end
+
+    subgraph Paths["路径选择"]
+        OPT_GAME["想做游戏（技术优先）<br/>❌ 被剪掉"]
+        OPT_STORY["想讲故事（故事优先）<br/>✅ 强烈推荐"]
+        OPT_MUST_GAME["必须是'游戏'<br/>❌ 被剪掉"]
+        OPT_ANY_FORM["可以是互动故事/视觉小说<br/>✅ 强烈推荐"]
+        OPT_LEVEL1["Level 1: 纯文字（Twine）<br/>✅ 必须从这里开始"]
+        OPT_LEVEL2["Level 2: + 少量插画<br/>⚠️ 之后考虑"]
+        OPT_LEVEL3["Level 3: 视觉小说（Ren'Py）<br/>⚠️ 之后考虑"]
+        OPT_LEVEL4["Level 4: Unity / Godot<br/>❌ 直接禁止"]
+    end
+
+    subgraph Risks["风险"]
+        R1["半年学 Unity，一事无成"]
+        R2["做了后觉得'不够'而放弃"]
+        R3["因为'不是游戏'而觉得失败"]
+    end
+
+    subgraph Success["成功定义"]
+        S1["故事被至少 10 个人完整体验过"]
+        S2["用户觉得'故事讲出去了'"]
+        S3["没有因为技术门槛彻底放弃"]
+    end
+
+    subgraph Failure["失败定义"]
+        F1["半年学 Unity，什么都没做出来"]
+        F2["半成品操作复杂，别人 5 分钟放弃"]
+        F3["因为'做不成游戏'而彻底放弃讲故事"]
+    end
+
+    A --> B1
+    A --> B2
+    A --> B3
+    A --> B4
+    A --> B5
+
+    B2 --> P3
+    B3 --> P3
+    B4 --> P3
+    B5 --> P2
+
+    C1 -->|直接剪掉| OPT_GAME
+    C1 -->|直接剪掉| OPT_LEVEL4
+    C2 -->|直接剪掉| OPT_GAME
+    C3 -->|直接剪掉| OPT_GAME
+    C3 -->|直接剪掉| OPT_LEVEL4
+    C4 -->|引导| D1
+    C5 -->|支撑| AS2
+
+    D1 -->|chosen_over| OPT_STORY
+    D1 -->|prunes| OPT_GAME
+    D2 -->|chosen_over| OPT_ANY_FORM
+    D2 -->|prunes| OPT_MUST_GAME
+    D3 -->|chosen_over| OPT_LEVEL1
+    D3 -->|prunes| OPT_LEVEL4
+
+    OPT_GAME -->|leads_to| R1
+    OPT_LEVEL4 -->|leads_to| R1
+    OPT_ANY_FORM -->|leads_to| R2
+    OPT_MUST_GAME -->|leads_to| R1
+
+    S1 -->|validates| P1
+
+    AS1 -.->|支撑| D1
+    AS2 -.->|支撑| D2
+    AS4 -.->|支撑| D3
+
+    classDef anchor fill:#e3f2fd,stroke:#1976d2
+    classDef pain fill:#ffebee,stroke:#c62828
+    classDef constraint fill:#fff3e0,stroke:#e65100
+    classDef decision fill:#f3e5f5,stroke:#7b1fa2
+    classDef chosen fill:#c8e6c9,stroke:#2e7d32
+    classDef pruned fill:#ffcdd2,stroke:#b71c1c,stroke-dasharray: 5 5
+    classDef risk fill:#fce4ec,stroke:#880e4f
+    classDef success fill:#e8f5e9,stroke:#1b5e20
+
+    class A anchor
+    class P1,P2,P3 pain
+    class C1,C2,C3,C4,C5 constraint
+    class D1,D2,D3 decision
+    class OPT_STORY,OPT_ANY_FORM,OPT_LEVEL1 chosen
+    class OPT_GAME,OPT_MUST_GAME,OPT_LEVEL4 pruned
+    class R1,R2,R3 risk
+    class S1,S2,S3 success
