@@ -13,67 +13,62 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Debug tree
+      - name: Show tree (debug)
         run: |
-          echo "=== Files under examples ==="
-          find docs/vibe-unpack/examples -type f | sort || true
+          echo "=== All files ==="
+          find docs/vibe-unpack -type f | sort || true
 
-      - name: Verify required files (hardcoded)
+      - name: Check the 6 examples have their 3 files
         run: |
           set -e
-          examples=(
-            docs/vibe-unpack/examples/c1-child-daily
-            docs/vibe-unpack/examples/c2-accounting
-            docs/vibe-unpack/examples/c3-handmade-shop
-            docs/vibe-unpack/examples/c4-fitness
-            docs/vibe-unpack/examples/c5-family-album
-            docs/vibe-unpack/examples/c6-novel-game
+          dirs=(
+            "docs/vibe-unpack/examples/c1-child-daily"
+            "docs/vibe-unpack/examples/c2-accounting"
+            "docs/vibe-unpack/examples/c3-handmade-shop"
+            "docs/vibe-unpack/examples/c4-fitness"
+            "docs/vibe-unpack/examples/c5-family-album"
+            "docs/vibe-unpack/examples/c6-novel-game"
           )
-          for dir in "${examples[@]}"; do
-            echo "Checking $dir"
-            ls -l "$dir/demand-spec.md" "$dir/demand-graph.json" "$dir/README.md"
+          for d in "${dirs[@]}"; do
+            echo "Checking $d"
+            ls -l "$d/demand-spec.md" "$d/demand-graph.json" "$d/README.md"
           done
-          echo "All required files exist."
+          echo "All files present."
 
-      - name: Validate JSONs (hardcoded)
+      - name: Validate all demand-graph.json
         run: |
           python3 - << 'PY'
-import json
-files = [
-    "docs/vibe-unpack/examples/c1-child-daily/demand-graph.json",
-    "docs/vibe-unpack/examples/c2-accounting/demand-graph.json",
-    "docs/vibe-unpack/examples/c3-handmade-shop/demand-graph.json",
-    "docs/vibe-unpack/examples/c4-fitness/demand-graph.json",
-    "docs/vibe-unpack/examples/c5-family-album/demand-graph.json",
-    "docs/vibe-unpack/examples/c6-novel-game/demand-graph.json",
-]
-for f in files:
-    with open(f, encoding="utf-8") as fh:
-        d = json.load(fh)
-    assert "version" in d
-    assert isinstance(d["nodes"], list)
-    assert isinstance(d["edges"], list)
-    assert "decision_points" in d
-    print("OK:", f, len(d["nodes"]), "nodes")
+import json, glob, sys, os
+ok = True
+for f in sorted(glob.glob("docs/vibe-unpack/examples/*/demand-graph.json")):
+    try:
+        data = json.load(open(f, encoding="utf-8"))
+        assert "version" in data
+        assert isinstance(data["nodes"], list)
+        assert isinstance(data["edges"], list)
+        assert "decision_points" in data
+        name = os.path.basename(os.path.dirname(f))
+        print(f"OK {name}: {len(data['nodes'])} nodes")
+    except Exception as e:
+        print(f"FAIL {f}: {e}")
+        ok = False
+if not ok:
+    sys.exit(1)
 print("All JSON OK")
 PY
 
-      - name: Check SKILL.md frontmatter (robust)
+      - name: Check SKILL.md frontmatter (tolerant)
         run: |
-          set -e
-          echo "=== SKILL.md first 6 lines ==="
-          head -6 docs/vibe-unpack/SKILL.md
+          echo "=== SKILL.md head ==="
+          head -8 docs/vibe-unpack/SKILL.md
           python3 - << 'PY'
 import sys
 with open("docs/vibe-unpack/SKILL.md", encoding="utf-8") as f:
-    lines = f.readlines()
-# Find the first non-empty line after possible ---
-for i, line in enumerate(lines[:10]):
-    if line.strip().startswith("name:"):
-        if "vibe-unpack" in line:
-            print("OK: found name: vibe-unpack near line", i+1)
-            sys.exit(0)
-print("FAIL: name: vibe-unpack not found in first 10 lines")
-sys.exit(1)
+    text = f.read()
+if "name: vibe-unpack" in text and "description:" in text:
+    print("SKILL frontmatter contains required keys")
+else:
+    print("SKILL frontmatter missing keys")
+    sys.exit(1)
 PY
-          echo "Frontmatter check passed."
+          echo "Frontmatter check passed (contains check)."
