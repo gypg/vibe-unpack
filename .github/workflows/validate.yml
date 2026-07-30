@@ -13,65 +13,63 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Debug - list examples directory
+      - name: List all example directories (debug)
         run: |
-          echo "=== Checking out tree ==="
-          find docs/vibe-unpack/examples -type f | sort || true
-          echo "=== ls per example ==="
+          echo "=== Example directories found ==="
+          ls -d docs/vibe-unpack/examples/c*-* || true
+          echo ""
+          echo "=== Files inside each ==="
           for d in docs/vibe-unpack/examples/c*-*; do
-            echo "---- $d ----"
-            ls -1 "$d" || true
+            echo ">>> $d"
+            ls -1 "$d" || echo "(empty or not dir)"
           done
 
-      - name: Check all examples have required files
+      - name: Verify every example has the three required files
         run: |
-          set -e
-          echo "Checking example completeness..."
-          missing=0
+          set -euo pipefail
+          echo "Checking required files..."
           for dir in docs/vibe-unpack/examples/c*-*; do
-            echo "Checking $dir"
-            for f in demand-spec.md demand-graph.json README.md; do
-              if [ ! -f "$dir/$f" ]; then
-                echo "MISSING $f in $dir"
-                missing=1
+            for file in demand-spec.md demand-graph.json README.md; do
+              path="$dir/$file"
+              if [ ! -f "$path" ]; then
+                echo "❌ MISSING: $path"
+                exit 1
               fi
             done
+            echo "✅ $dir"
           done
-          if [ "$missing" -eq 1 ]; then
-            echo "Some files are missing!"
-            exit 1
-          fi
-          echo "All examples have required files."
+          echo "All examples have the required files."
 
-      - name: Validate all JSONs cleanly
+      - name: Validate JSON structure of all demand graphs
         run: |
-          python3 - << 'PYEOF'
+          python3 - << 'PY'
 import json, glob, sys
+
 errors = []
 for f in sorted(glob.glob("docs/vibe-unpack/examples/*/demand-graph.json")):
     try:
-        data = json.load(open(f))
-        assert "version" in data
-        assert isinstance(data.get("nodes"), list)
-        assert isinstance(data.get("edges"), list)
-        assert "decision_points" in data
-        print(f"VALID: {f} ({len(data['nodes'])} nodes, {len(data['edges'])} edges)")
+        with open(f) as fh:
+            data = json.load(fh)
+        assert "version" in data, "missing 'version'"
+        assert isinstance(data.get("nodes"), list), "'nodes' must be a list"
+        assert isinstance(data.get("edges"), list), "'edges' must be a list"
+        assert "decision_points" in data, "missing 'decision_points'"
+        print(f"✅ VALID: {f}  ({len(data['nodes'])} nodes / {len(data['edges'])} edges)")
     except Exception as e:
         errors.append((f, str(e)))
-        print(f"INVALID: {f} - {e}")
-if errors:
-    print("\nErrors:")
-    for f, e in errors:
-        print(f"  {f}: {e}")
-    sys.exit(1)
-print("\nAll JSONs valid.")
-PYEOF
+        print(f"❌ INVALID: {f} — {e}")
 
-      - name: Check SKILL.md frontmatter
+if errors:
+    print("\n❌ JSON validation failed.")
+    sys.exit(1)
+print("\n✅ All JSON files are structurally valid.")
+PY
+
+      - name: Check SKILL.md has proper frontmatter
         run: |
           set -e
-          echo "=== SKILL.md head ==="
-          head -8 docs/vibe-unpack/SKILL.md
-          grep -q "^name: vibe-unpack" docs/vibe-unpack/SKILL.md || { echo "Missing or wrong 'name:'"; exit 1; }
-          grep -q "^description:" docs/vibe-unpack/SKILL.md || { echo "Missing 'description:'"; exit 1; }
-          echo "SKILL.md frontmatter OK."
+          echo "=== First lines of SKILL.md ==="
+          head -6 docs/vibe-unpack/SKILL.md
+          grep -q "^name: vibe-unpack$" docs/vibe-unpack/SKILL.md || { echo "❌ 'name: vibe-unpack' not found exactly"; exit 1; }
+          grep -q "^description:" docs/vibe-unpack/SKILL.md || { echo "❌ 'description:' line missing"; exit 1; }
+          echo "✅ SKILL.md frontmatter looks good."
