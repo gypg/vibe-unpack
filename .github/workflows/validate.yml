@@ -12,90 +12,63 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
 
-      - name: Debug listing
+      - name: List example directories
         run: |
-          set -x
-          echo "=== find all example dirs ==="
-          find docs/vibe-unpack/examples -maxdepth 1 -type d -name 'c*-*' | sort
+          echo "=== Example directories ==="
+          find docs/vibe-unpack/examples -maxdepth 1 -type d -name 'c*-*' | sort || true
           echo ""
-          echo "=== tree of examples ==="
-          find docs/vibe-unpack/examples -type f | sort
-          echo ""
-          echo "=== ls -la each c* dir ==="
-          for d in $(find docs/vibe-unpack/examples -maxdepth 1 -type d -name 'c*-*' | sort); do
-            echo "---- $d ----"
-            ls -la "$d" || true
-          done
+          echo "=== All files under examples ==="
+          find docs/vibe-unpack/examples -type f | sort || true
 
-      - name: Verify every example dir has the three required files
+      - name: Check required files exist in every example
         run: |
-          set -euo pipefail
-          echo "=== Verifying required files with find ==="
-          missing=0
+          set -e
+          echo "=== Checking required files ==="
+          status=0
           while IFS= read -r dir; do
-            echo "Checking: $dir"
-            for fname in demand-spec.md demand-graph.json README.md; do
-              if [ ! -f "$dir/$fname" ]; then
-                echo "MISSING: $dir/$fname"
-                missing=1
+            echo "Dir: $dir"
+            for f in demand-spec.md demand-graph.json README.md; do
+              if [ -f "$dir/$f" ]; then
+                echo "  ✓ $f"
               else
-                echo "  OK: $fname"
+                echo "  ✗ MISSING $f"
+                status=1
               fi
             done
           done < <(find docs/vibe-unpack/examples -maxdepth 1 -type d -name 'c*-*' | sort)
-
-          if [ "$missing" -eq 1 ]; then
-            echo "❌ One or more required files are missing"
+          if [ "$status" -ne 0 ]; then
+            echo "Some required files are missing"
             exit 1
           fi
-          echo "✅ All required files present for all examples."
+          echo "All required files present."
 
-      - name: Validate JSON structure for all demand-graph.json
+      - name: Validate demand-graph.json files
         run: |
-          set -e
-          echo "=== Validating JSON files ==="
-          errors=0
-          while IFS= read -r f; do
-            echo "Validating $f"
-            if ! python3 -c '
-import json, sys
-try:
-    with open(sys.argv[1], encoding="utf-8") as fh:
-        data = json.load(fh)
-    assert "version" in data
-    assert isinstance(data.get("nodes"), list)
-    assert isinstance(data.get("edges"), list)
-    assert "decision_points" in data
-    print(f"  ✅ {len(data[\"nodes\"])} nodes, {len(data[\"edges\"])} edges")
-except Exception as e:
-    print(f"  ❌ {e}")
+          python3 - << 'PYEOF'
+import json, glob, sys
+errors = []
+for f in sorted(glob.glob("docs/vibe-unpack/examples/*/demand-graph.json")):
+    try:
+        data = json.load(open(f, encoding="utf-8"))
+        assert "version" in data
+        assert isinstance(data.get("nodes"), list)
+        assert isinstance(data.get("edges"), list)
+        assert "decision_points" in data
+        print(f"✓ {f.split('/')[-2]}: {len(data['nodes'])} nodes, {len(data['edges'])} edges")
+    except Exception as e:
+        errors.append((f, str(e)))
+        print(f"✗ {f}: {e}")
+if errors:
+    print(f"\n{len(errors)} error(s)")
     sys.exit(1)
-' "$f"; then
-              errors=$((errors+1))
-            fi
-          done < <(find docs/vibe-unpack/examples -type f -name 'demand-graph.json' | sort)
-
-          if [ "$errors" -gt 0 ]; then
-            echo "❌ $errors JSON validation error(s)"
-            exit 1
-          fi
-          echo "✅ All JSON files are valid."
+print("\nAll JSON files valid.")
+PYEOF
 
       - name: Check SKILL.md frontmatter
         run: |
           set -e
-          echo "=== SKILL.md first 8 lines ==="
-          head -8 docs/vibe-unpack/SKILL.md
-          echo ""
-          if ! grep -q "^name: vibe-unpack$" docs/vibe-unpack/SKILL.md; then
-            echo "❌ 'name: vibe-unpack' line not found exactly"
-            exit 1
-          fi
-          if ! grep -q "^description:" docs/vibe-unpack/SKILL.md; then
-            echo "❌ 'description:' line not found"
-            exit 1
-          fi
-          echo "✅ SKILL.md frontmatter OK."
+          head -5 docs/vibe-unpack/SKILL.md
+          grep -q '^name: vibe-unpack$' docs/vibe-unpack/SKILL.md || { echo "Missing exact 'name: vibe-unpack' line"; exit 1; }
+          grep -q '^description:' docs/vibe-unpack/SKILL.md || { echo "Missing 'description:' line"; exit 1; }
+          echo "✓ SKILL.md frontmatter OK"
