@@ -13,62 +13,44 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: List example directories
+      - name: List examples tree
         run: |
-          echo "=== Example directories ==="
-          find docs/vibe-unpack/examples -maxdepth 1 -type d -name 'c*-*' | sort || true
-          echo ""
-          echo "=== All files under examples ==="
-          find docs/vibe-unpack/examples -type f | sort || true
+          find docs/vibe-unpack/examples -type f | sort
 
-      - name: Check required files exist in every example
+      - name: Check required files
         run: |
-          set -e
-          echo "=== Checking required files ==="
-          status=0
-          while IFS= read -r dir; do
-            echo "Dir: $dir"
+          for dir in docs/vibe-unpack/examples/c1-child-daily docs/vibe-unpack/examples/c2-accounting docs/vibe-unpack/examples/c3-handmade-shop docs/vibe-unpack/examples/c4-fitness docs/vibe-unpack/examples/c5-family-album docs/vibe-unpack/examples/c6-novel-game; do
             for f in demand-spec.md demand-graph.json README.md; do
-              if [ -f "$dir/$f" ]; then
-                echo "  ✓ $f"
-              else
-                echo "  ✗ MISSING $f"
-                status=1
+              if [ ! -f "$dir/$f" ]; then
+                echo "MISSING $dir/$f"
+                exit 1
               fi
             done
-          done < <(find docs/vibe-unpack/examples -maxdepth 1 -type d -name 'c*-*' | sort)
-          if [ "$status" -ne 0 ]; then
-            echo "Some required files are missing"
-            exit 1
-          fi
+            echo "OK: $dir"
+          done
           echo "All required files present."
 
-      - name: Validate demand-graph.json files
+      - name: Validate JSONs
         run: |
-          python3 - << 'PYEOF'
+          python3 - << 'PY'
 import json, glob, sys
-errors = []
+err = []
 for f in sorted(glob.glob("docs/vibe-unpack/examples/*/demand-graph.json")):
     try:
-        data = json.load(open(f, encoding="utf-8"))
-        assert "version" in data
-        assert isinstance(data.get("nodes"), list)
-        assert isinstance(data.get("edges"), list)
-        assert "decision_points" in data
-        print(f"✓ {f.split('/')[-2]}: {len(data['nodes'])} nodes, {len(data['edges'])} edges")
+        d = json.load(open(f, encoding="utf-8"))
+        assert "version" in d and isinstance(d["nodes"], list) and isinstance(d["edges"], list) and "decision_points" in d
+        print("OK:", f)
     except Exception as e:
-        errors.append((f, str(e)))
-        print(f"✗ {f}: {e}")
-if errors:
-    print(f"\n{len(errors)} error(s)")
+        err.append((f, str(e)))
+        print("FAIL:", f, e)
+if err:
     sys.exit(1)
-print("\nAll JSON files valid.")
-PYEOF
+print("All JSONs OK")
+PY
 
-      - name: Check SKILL.md frontmatter
+      - name: Check SKILL.md
         run: |
-          set -e
           head -5 docs/vibe-unpack/SKILL.md
-          grep -q '^name: vibe-unpack$' docs/vibe-unpack/SKILL.md || { echo "Missing exact 'name: vibe-unpack' line"; exit 1; }
-          grep -q '^description:' docs/vibe-unpack/SKILL.md || { echo "Missing 'description:' line"; exit 1; }
-          echo "✓ SKILL.md frontmatter OK"
+          grep -q '^name: vibe-unpack$' docs/vibe-unpack/SKILL.md || { echo "bad name"; exit 1; }
+          grep -q '^description:' docs/vibe-unpack/SKILL.md || { echo "bad desc"; exit 1; }
+          echo "SKILL frontmatter OK"
