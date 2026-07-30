@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build / temp
+dist/
+build/
+*.log
+*.tmp
+
+# Sensitive (if any)
+.env
+*.key
+*.pem
+
+# Claude local (if user doesn't want to commit their deployed skills)
+# ~/.claude/skills/vibe-unpack/  — usually not committed here
