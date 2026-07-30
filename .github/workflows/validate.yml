@@ -16,7 +16,7 @@ jobs:
       - name: Debug - list examples directory
         run: |
           echo "=== Checking out tree ==="
-          find docs/vibe-unpack/examples -type f | sort
+          find docs/vibe-unpack/examples -type f | sort || true
           echo "=== ls per example ==="
           for d in docs/vibe-unpack/examples/c*-*; do
             echo "---- $d ----"
@@ -43,34 +43,6 @@ jobs:
           fi
           echo "All examples have required files."
 
-      - name: Validate JSON structure (basic)
-        run: |
-          set -e
-          for f in docs/vibe-unpack/examples/*/demand-graph.json; do
-            echo "Validating $f"
-            python3 -c '
-import json, sys, os
-path = os.environ.get("FILE_PATH")
-if not path:
-    print("No FILE_PATH")
-    sys.exit(1)
-try:
-    with open(path) as fh:
-        data = json.load(fh)
-    assert "version" in data, "missing version"
-    assert "nodes" in data and isinstance(data["nodes"], list), "bad nodes"
-    assert "edges" in data and isinstance(data["edges"], list), "bad edges"
-    assert "decision_points" in data, "missing decision_points"
-    print(f"OK: {len(data[\"nodes\"])} nodes, {len(data[\"edges\"])} edges")
-except Exception as e:
-    print(f"INVALID {path}: {e}")
-    sys.exit(1)
-            ' 2>&1 || { echo "Validation failed for $f"; exit 1; }
-          done
-        env:
-          FILE_PATH: ${{ matrix.file }}   # not used, we loop inside
-        # Better: use a loop with proper env per file. Simpler version below.
-
       - name: Validate all JSONs cleanly
         run: |
           python3 - << 'PYEOF'
@@ -82,7 +54,8 @@ for f in sorted(glob.glob("docs/vibe-unpack/examples/*/demand-graph.json")):
         assert "version" in data
         assert isinstance(data.get("nodes"), list)
         assert isinstance(data.get("edges"), list)
-        print(f"VALID: {f} ({len(data['nodes'])} nodes)")
+        assert "decision_points" in data
+        print(f"VALID: {f} ({len(data['nodes'])} nodes, {len(data['edges'])} edges)")
     except Exception as e:
         errors.append((f, str(e)))
         print(f"INVALID: {f} - {e}")
