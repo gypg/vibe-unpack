@@ -1,0 +1,50 @@
+name: Validate vibe-unpack examples
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check all examples have required files
+        run: |
+          echo "Checking example completeness..."
+          for dir in docs/vibe-unpack/examples/c*-*; do
+            echo "Checking $dir"
+            if [ ! -f "$dir/demand-spec.md" ]; then echo "MISSING demand-spec.md in $dir"; exit 1; fi
+            if [ ! -f "$dir/demand-graph.json" ]; then echo "MISSING demand-graph.json in $dir"; exit 1; fi
+            if [ ! -f "$dir/README.md" ]; then echo "MISSING README.md in $dir"; exit 1; fi
+          done
+          echo "All examples have required files."
+
+      - name: Validate JSON structure (basic)
+        run: |
+          for f in docs/vibe-unpack/examples/*/demand-graph.json; do
+            echo "Validating $f"
+            python3 -c "
+import json, sys
+try:
+    data = json.load(open('$f'))
+    assert 'version' in data
+    assert 'nodes' in data
+    assert 'edges' in data
+    assert 'decision_points' in data
+    print(f'OK: {len(data[\"nodes\"])} nodes, {len(data[\"edges\"])} edges')
+except Exception as e:
+    print(f'INVALID: {e}')
+    sys.exit(1)
+            "
+          done
+
+      - name: Check SKILL.md frontmatter
+        run: |
+          head -10 docs/vibe-unpack/SKILL.md
+          grep -q "name: vibe-unpack" docs/vibe-unpack/SKILL.md || (echo "Missing name in frontmatter"; exit 1)
+          grep -q "description:" docs/vibe-unpack/SKILL.md || (echo "Missing description"; exit 1)
+          echo "SKILL.md frontmatter looks good."
