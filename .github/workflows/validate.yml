@@ -11,64 +11,102 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Show tree (debug)
+      - name: Step 1 - Show all files under examples
         run: |
-          echo "=== All files ==="
-          find docs/vibe-unpack -type f | sort || true
+          echo "=== Full file list ==="
+          find docs/vibe-unpack/examples -type f | sort
+          echo "=== End of list ==="
 
-      - name: Check the 6 examples have their 3 files
+      - name: Step 2 - Verify all 6 examples have the 3 required files
         run: |
           set -e
-          dirs=(
-            "docs/vibe-unpack/examples/c1-child-daily"
-            "docs/vibe-unpack/examples/c2-accounting"
-            "docs/vibe-unpack/examples/c3-handmade-shop"
-            "docs/vibe-unpack/examples/c4-fitness"
-            "docs/vibe-unpack/examples/c5-family-album"
-            "docs/vibe-unpack/examples/c6-novel-game"
+          echo "Checking required files..."
+          examples=(
+            docs/vibe-unpack/examples/c1-child-daily
+            docs/vibe-unpack/examples/c2-accounting
+            docs/vibe-unpack/examples/c3-handmade-shop
+            docs/vibe-unpack/examples/c4-fitness
+            docs/vibe-unpack/examples/c5-family-album
+            docs/vibe-unpack/examples/c6-novel-game
           )
-          for d in "${dirs[@]}"; do
-            echo "Checking $d"
-            ls -l "$d/demand-spec.md" "$d/demand-graph.json" "$d/README.md"
+          for d in "${examples[@]}"; do
+            echo ">>> $d"
+            ls -l "$d/demand-spec.md" || { echo "MISSING demand-spec.md"; exit 1; }
+            ls -l "$d/demand-graph.json" || { echo "MISSING demand-graph.json"; exit 1; }
+            ls -l "$d/README.md" || { echo "MISSING README.md"; exit 1; }
+            echo "OK: $d"
           done
-          echo "All files present."
+          echo "✅ All required files present."
 
-      - name: Validate all demand-graph.json
+      - name: Step 3 - Validate JSON structure (Python)
         run: |
           python3 - << 'PY'
 import json, glob, sys, os
-ok = True
-for f in sorted(glob.glob("docs/vibe-unpack/examples/*/demand-graph.json")):
-    try:
-        data = json.load(open(f, encoding="utf-8"))
-        assert "version" in data
-        assert isinstance(data["nodes"], list)
-        assert isinstance(data["edges"], list)
-        assert "decision_points" in data
-        name = os.path.basename(os.path.dirname(f))
-        print(f"OK {name}: {len(data['nodes'])} nodes")
-    except Exception as e:
-        print(f"FAIL {f}: {e}")
-        ok = False
-if not ok:
+
+files = sorted(glob.glob("docs/vibe-unpack/examples/*/demand-graph.json"))
+if len(files) != 6:
+    print(f"Expected 6 JSON files, found {len(files)}")
     sys.exit(1)
-print("All JSON OK")
+
+errors = []
+for f in files:
+    try:
+        with open(f, encoding="utf-8") as fh:
+            data = json.load(fh)
+        assert "version" in data, "missing version"
+        assert isinstance(data.get("nodes"), list), "nodes not list"
+        assert isinstance(data.get("edges"), list), "edges not list"
+        assert "decision_points" in data, "missing decision_points"
+        name = os.path.basename(os.path.dirname(f))
+        print(f"✅ {name}: {len(data['nodes'])} nodes, {len(data['edges'])} edges")
+    except Exception as e:
+        errors.append((f, str(e)))
+        print(f"❌ {f}: {e}")
+
+if errors:
+    print(f"\n{len(errors)} error(s)")
+    sys.exit(1)
+print("\n✅ All 6 JSON files are valid.")
 PY
 
-      - name: Check SKILL.md frontmatter (tolerant)
+      - name: Step 4 - Check SKILL.md frontmatter (very tolerant)
         run: |
-          echo "=== SKILL.md head ==="
-          head -8 docs/vibe-unpack/SKILL.md
+          echo "=== First 10 lines of SKILL.md (with cat -A for visibility) ==="
+          head -10 docs/vibe-unpack/SKILL.md | cat -A
+          echo ""
           python3 - << 'PY'
 import sys
+
 with open("docs/vibe-unpack/SKILL.md", encoding="utf-8") as f:
-    text = f.read()
-if "name: vibe-unpack" in text and "description:" in text:
-    print("SKILL frontmatter contains required keys")
-else:
-    print("SKILL frontmatter missing keys")
+    content = f.read()
+
+lines = content.splitlines()
+
+# Look for the required keys anywhere in the first 15 lines
+found_name = False
+found_desc = False
+for i, line in enumerate(lines[:15]):
+    if "name:" in line and "vibe-unpack" in line:
+        found_name = True
+        print(f"Found name line at {i+1}: {line.strip()}")
+    if line.strip().startswith("description:"):
+        found_desc = True
+        print(f"Found description line at {i+1}")
+
+if not found_name:
+    print("❌ Could not find a line containing 'name:' and 'vibe-unpack'")
     sys.exit(1)
+if not found_desc:
+    print("❌ Could not find a line starting with 'description:'")
+    sys.exit(1)
+
+print("✅ SKILL.md frontmatter check passed (tolerant match).")
 PY
-          echo "Frontmatter check passed (contains check)."
+
+      - name: Final - All checks passed
+        run: |
+          echo "🎉 All validation steps completed successfully."
+          echo "vibe-unpack examples and SKILL.md are valid."
