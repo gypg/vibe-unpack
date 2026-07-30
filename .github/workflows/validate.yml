@@ -12,64 +12,90 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
-      - name: List all example directories (debug)
+      - name: Debug listing
         run: |
-          echo "=== Example directories found ==="
-          ls -d docs/vibe-unpack/examples/c*-* || true
+          set -x
+          echo "=== find all example dirs ==="
+          find docs/vibe-unpack/examples -maxdepth 1 -type d -name 'c*-*' | sort
           echo ""
-          echo "=== Files inside each ==="
-          for d in docs/vibe-unpack/examples/c*-*; do
-            echo ">>> $d"
-            ls -1 "$d" || echo "(empty or not dir)"
+          echo "=== tree of examples ==="
+          find docs/vibe-unpack/examples -type f | sort
+          echo ""
+          echo "=== ls -la each c* dir ==="
+          for d in $(find docs/vibe-unpack/examples -maxdepth 1 -type d -name 'c*-*' | sort); do
+            echo "---- $d ----"
+            ls -la "$d" || true
           done
 
-      - name: Verify every example has the three required files
+      - name: Verify every example dir has the three required files
         run: |
           set -euo pipefail
-          echo "Checking required files..."
-          for dir in docs/vibe-unpack/examples/c*-*; do
-            for file in demand-spec.md demand-graph.json README.md; do
-              path="$dir/$file"
-              if [ ! -f "$path" ]; then
-                echo "❌ MISSING: $path"
-                exit 1
+          echo "=== Verifying required files with find ==="
+          missing=0
+          while IFS= read -r dir; do
+            echo "Checking: $dir"
+            for fname in demand-spec.md demand-graph.json README.md; do
+              if [ ! -f "$dir/$fname" ]; then
+                echo "MISSING: $dir/$fname"
+                missing=1
+              else
+                echo "  OK: $fname"
               fi
             done
-            echo "✅ $dir"
-          done
-          echo "All examples have the required files."
+          done < <(find docs/vibe-unpack/examples -maxdepth 1 -type d -name 'c*-*' | sort)
 
-      - name: Validate JSON structure of all demand graphs
-        run: |
-          python3 - << 'PY'
-import json, glob, sys
+          if [ "$missing" -eq 1 ]; then
+            echo "❌ One or more required files are missing"
+            exit 1
+          fi
+          echo "✅ All required files present for all examples."
 
-errors = []
-for f in sorted(glob.glob("docs/vibe-unpack/examples/*/demand-graph.json")):
-    try:
-        with open(f) as fh:
-            data = json.load(fh)
-        assert "version" in data, "missing 'version'"
-        assert isinstance(data.get("nodes"), list), "'nodes' must be a list"
-        assert isinstance(data.get("edges"), list), "'edges' must be a list"
-        assert "decision_points" in data, "missing 'decision_points'"
-        print(f"✅ VALID: {f}  ({len(data['nodes'])} nodes / {len(data['edges'])} edges)")
-    except Exception as e:
-        errors.append((f, str(e)))
-        print(f"❌ INVALID: {f} — {e}")
-
-if errors:
-    print("\n❌ JSON validation failed.")
-    sys.exit(1)
-print("\n✅ All JSON files are structurally valid.")
-PY
-
-      - name: Check SKILL.md has proper frontmatter
+      - name: Validate JSON structure for all demand-graph.json
         run: |
           set -e
-          echo "=== First lines of SKILL.md ==="
-          head -6 docs/vibe-unpack/SKILL.md
-          grep -q "^name: vibe-unpack$" docs/vibe-unpack/SKILL.md || { echo "❌ 'name: vibe-unpack' not found exactly"; exit 1; }
-          grep -q "^description:" docs/vibe-unpack/SKILL.md || { echo "❌ 'description:' line missing"; exit 1; }
-          echo "✅ SKILL.md frontmatter looks good."
+          echo "=== Validating JSON files ==="
+          errors=0
+          while IFS= read -r f; do
+            echo "Validating $f"
+            if ! python3 -c '
+import json, sys
+try:
+    with open(sys.argv[1], encoding="utf-8") as fh:
+        data = json.load(fh)
+    assert "version" in data
+    assert isinstance(data.get("nodes"), list)
+    assert isinstance(data.get("edges"), list)
+    assert "decision_points" in data
+    print(f"  ✅ {len(data[\"nodes\"])} nodes, {len(data[\"edges\"])} edges")
+except Exception as e:
+    print(f"  ❌ {e}")
+    sys.exit(1)
+' "$f"; then
+              errors=$((errors+1))
+            fi
+          done < <(find docs/vibe-unpack/examples -type f -name 'demand-graph.json' | sort)
+
+          if [ "$errors" -gt 0 ]; then
+            echo "❌ $errors JSON validation error(s)"
+            exit 1
+          fi
+          echo "✅ All JSON files are valid."
+
+      - name: Check SKILL.md frontmatter
+        run: |
+          set -e
+          echo "=== SKILL.md first 8 lines ==="
+          head -8 docs/vibe-unpack/SKILL.md
+          echo ""
+          if ! grep -q "^name: vibe-unpack$" docs/vibe-unpack/SKILL.md; then
+            echo "❌ 'name: vibe-unpack' line not found exactly"
+            exit 1
+          fi
+          if ! grep -q "^description:" docs/vibe-unpack/SKILL.md; then
+            echo "❌ 'description:' line not found"
+            exit 1
+          fi
+          echo "✅ SKILL.md frontmatter OK."
