@@ -1,0 +1,60 @@
+name: Validate Examples Template
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate all 6 demand-spec.md follow the current template
+        run: |
+          python3 - << 'EOF'
+          import re, sys, glob
+
+          examples = sorted(glob.glob("vibe-unpack/examples/*/demand-spec.md"))
+          if len(examples) != 6:
+              print(f"ERROR: Expected 6 examples, found {len(examples)}")
+              sys.exit(1)
+
+          failures = []
+
+          for path in examples:
+              name = path.split("/")[-2]
+              with open(path, encoding="utf-8") as f:
+                  content = f.read()
+
+              issues = []
+
+              # 1. Must have the important prompt header
+              if "> **给执行者的重要提示**" not in content:
+                  issues.append("missing '给执行者的重要提示' header")
+
+              # 2. Must have Section 6 with the exact title
+              if "## 6. 已确认的假设与默认决策（执行者必须遵守）" not in content:
+                  issues.append("missing or wrong '## 6. 已确认的假设与默认决策（执行者必须遵守）'")
+
+              # 3. Must have exactly 10 sections: ## 0. through ## 9.
+              sections = re.findall(r"^## (\d+)\.", content, re.MULTILINE)
+              expected = [str(i) for i in range(10)]
+              if sections != expected:
+                  issues.append(f"sections must be 0-9 (got {sections})")
+
+              if issues:
+                  failures.append(f"{name}: " + "; ".join(issues))
+              else:
+                  print(f"✓ {name} passed")
+
+          if failures:
+              print("\n❌ FAILURES:")
+              for f in failures:
+                  print("  " + f)
+              sys.exit(1)
+          else:
+              print("\n✅ All 6 examples pass the current template requirements.")
+          EOF
