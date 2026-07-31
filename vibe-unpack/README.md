@@ -96,8 +96,7 @@ graph TD
 ### 作为 Claude Code Skill（推荐）
 
 ```bash
-# 复制到你的技能目录
-cp -r docs/vibe-unpack ~/.claude/skills/vibe-unpack
+cp -r vibe-unpack ~/.claude/skills/vibe-unpack
 ```
 
 之后在对话中遇到模糊需求时，Claude 会自动加载。
@@ -120,26 +119,29 @@ cp -r docs/vibe-unpack ~/.claude/skills/vibe-unpack
 4. **分支和剪枝必须可视化**（人类要看到「为什么走到这里」）
 5. **输出必须双格式**（人类看图 + AI 看结构化数据）
 
-完整原则见 [design-A-core-principles.md](design-A-core-principles.md)。
+完整原则见 [design-A-core-principles.md](design/design-A-core-principles.md)。
 
 ---
 
 ## 项目结构
 
 ```
-docs/vibe-unpack/
-├── SKILL.md                    # 可直接调用的技能定义（MVP 版）
+vibe-unpack/
+├── SKILL.md                    # 核心规则（可直接作为 system prompt 使用）
 ├── README.md                   # 本文件
-├── design-A-*.md               # 核心原则
-├── design-B-*.md               # 图谱 schema + 六大维度
-├── design-C-*.md               # 6 个压力场景设计
-└── examples/
-    ├── c1-child-daily/         # 记录孩子日常（最经典案例）
-    ├── c2-accounting/          # 极简记账
-    ├── c3-handmade-shop/       # 手作店网站
-    ├── c4-fitness/             # 健身打卡
-    ├── c5-family-album/        # 家庭相册
-    └── c6-novel-game/          # 小说做游戏（野心与能力冲突）
+├── design/
+│   ├── design-A-core-principles.md   # 核心原则
+│   ├── design-B-graph-schema.md      # 图谱 schema + 六大维度
+│   └── design-C-pressure-scenarios.md # 6 个压力场景设计
+├── examples/                   # 6 个完整真实案例（每个含 demand-spec + graph + mmd + README）
+│   ├── c1-child-daily/         # 记录孩子日常（最经典案例）
+│   ├── c2-accounting/          # 极简记账
+│   ├── c3-handmade-shop/       # 手作店网站
+│   ├── c4-fitness/             # 健身打卡
+│   ├── c5-family-album/        # 家庭相册
+│   └── c6-novel-game/          # 小说做游戏（野心与能力冲突）
+├── scripts/                    # 辅助脚本
+└── templates/                  # 输出模板（可选）
 ```
 
 ---
